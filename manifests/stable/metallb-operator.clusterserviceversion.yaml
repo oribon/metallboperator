@@ -466,6 +466,18 @@ spec:
           - podsecuritypolicies
           verbs:
           - use
+        - apiGroups:
+          - authentication.k8s.io
+          resources:
+          - tokenreviews
+          verbs:
+          - create
+        - apiGroups:
+          - authorization.k8s.io
+          resources:
+          - subjectaccessreviews
+          verbs:
+          - create
         serviceAccountName: speaker
       deployments:
       - name: metallb-operator-controller-manager
@@ -773,6 +785,18 @@ spec:
           - securitycontextconstraints
           verbs:
           - use
+        - apiGroups:
+          - authentication.k8s.io
+          resources:
+          - tokenreviews
+          verbs:
+          - create
+        - apiGroups:
+          - authorization.k8s.io
+          resources:
+          - subjectaccessreviews
+          verbs:
+          - create
         serviceAccountName: speaker
     strategy: deployment
   installModes:
