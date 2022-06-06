@@ -400,8 +400,6 @@ spec:
               value: /etc/frr_reloader/reloader.pid
             - name: METALLB_BGP_TYPE
               value: frr
-            # - name: FRR_LOGGING_LEVEL
-            #   value: informational
             - name: METALLB_NODE_NAME
               valueFrom:
                 fieldRef:
@@ -617,6 +615,25 @@ webhooks:
           - UPDATE
         resources:
           - addresspools
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: webhook-service
+        namespace: metallb-system
+        path: /validate-metallb-io-v1beta1-bfdprofile
+    failurePolicy: Fail
+    name: bfdprofilevalidationwebhook.metallb.io
+    rules:
+      - apiGroups:
+          - metallb.io
+        apiVersions:
+          - v1beta1
+        operations:
+          - DELETE
+        resources:
+          - bfdprofiles
     sideEffects: None
   - admissionReviewVersions:
       - v1
