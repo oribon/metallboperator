@@ -564,7 +564,7 @@ spec:
                   - /controller
                   env:
                     - name: METALLB_BGP_TYPE
-                      value: native
+                      value: frr
                   image: quay.io/openshift/origin-metallb:4.11
                   livenessProbe:
                     failureThreshold: 3
