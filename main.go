@@ -19,7 +19,6 @@ package main
 import (
 	"flag"
 	"os"
-	"strconv"
 
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
@@ -74,7 +73,7 @@ func main() {
 
 	setupLog.Info("git commit:", "id", build)
 
-	watchNamespace := checkEnvVar("WATCH_NAMESPACE")
+	operatorNamespace := checkEnvVar("OPERATOR_NAMESPACE")
 	checkEnvVar("SPEAKER_IMAGE")
 	checkEnvVar("CONTROLLER_IMAGE")
 
@@ -83,7 +82,7 @@ func main() {
 		MetricsBindAddress: metricsAddr,
 		LeaderElection:     enableLeaderElection,
 		LeaderElectionID:   "metallb.io.metallboperator",
-		Namespace:          watchNamespace,
+		Namespace:          operatorNamespace,
 	})
 	if err != nil {
 		setupLog.Error(err, "unable to start manager")
@@ -97,20 +96,14 @@ func main() {
 		os.Exit(1)
 	}
 
-	webHookEnabled, err := strconv.ParseBool(os.Getenv("ENABLE_WEBHOOK"))
-	if err != nil {
-		setupLog.Error(err, "unable to get enable webhook parameter")
-		os.Exit(1)
-	}
-
 	bgpType := os.Getenv("METALLB_BGP_TYPE")
 	if err = (&controllers.MetalLBReconciler{
 		Client:       mgr.GetClient(),
 		Log:          ctrl.Log.WithName("controllers").WithName("MetalLB"),
 		Scheme:       mgr.GetScheme(),
 		PlatformInfo: platformInfo,
-		Namespace:    watchNamespace,
-	}).SetupWithManager(mgr, bgpType, webHookEnabled); err != nil {
+		Namespace:    operatorNamespace,
+	}).SetupWithManager(mgr, bgpType); err != nil {
 		setupLog.Error(err, "unable to create controller", "controller", "MetalLB")
 		os.Exit(1)
 	}

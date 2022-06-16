@@ -45,6 +45,7 @@ const (
 	defaultMetalLBCrName          = "metallb"
 	MetalLBManifestPathController = "./bindata/deployment"
 	MetalLBSpeakerDaemonSet       = "speaker"
+	MetalLBWebhookSecret          = "webhook-server-cert"
 )
 
 const (
@@ -67,8 +68,6 @@ var PodMonitorsPath = fmt.Sprintf("%s/%s", MetalLBManifestPathController, "prome
 // Namespace Scoped
 // +kubebuilder:rbac:groups=apps,namespace=metallb-system,resources=deployments;daemonsets,verbs=get;list;watch;create;update;patch;delete
 // +kubebuilder:rbac:groups=monitoring.coreos.com,resources=podmonitors,verbs=get;list;watch;create;update;patch;delete
-// +kubebuilder:rbac:groups=cert-manager.io,namespace=metallb-system,resources=certificates,verbs=create;delete;get;update;patch
-// +kubebuilder:rbac:groups=cert-manager.io,namespace=metallb-system,resources=issuers,verbs=create;delete;get;update;patch
 // +kubebuilder:rbac:groups="",namespace=metallb-system,resources=services,verbs=create;delete;get;update;patch
 
 // Cluster Scoped
@@ -78,6 +77,7 @@ var PodMonitorsPath = fmt.Sprintf("%s/%s", MetalLBManifestPathController, "prome
 // +kubebuilder:rbac:groups=metallb.io,resources=metallbs/finalizers,verbs=delete;get;update;patch
 // +kubebuilder:rbac:groups=apiextensions.k8s.io,resources=customresourcedefinitions,verbs=get;list;watch
 // +kubebuilder:rbac:groups=admissionregistration.k8s.io,resources=validatingwebhookconfigurations,verbs=create;delete;get;update;patch
+// +kubebuilder:rbac:groups="",resources=secrets,verbs=create;delete;get;update;patch;list;watch
 
 func (r *MetalLBReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	_ = context.Background()
@@ -135,7 +135,7 @@ func (r *MetalLBReconciler) reconcileResource(ctx context.Context, req ctrl.Requ
 	return ctrl.Result{}, status.ConditionAvailable, nil
 }
 
-func (r *MetalLBReconciler) SetupWithManager(mgr ctrl.Manager, bgpType string, enableWebhook bool) error {
+func (r *MetalLBReconciler) SetupWithManager(mgr ctrl.Manager, bgpType string) error {
 	if bgpType == "" {
 		bgpType = bgpNative
 	}
@@ -144,12 +144,10 @@ func (r *MetalLBReconciler) SetupWithManager(mgr ctrl.Manager, bgpType string, e
 	}
 	switch {
 	case r.PlatformInfo.IsOpenShift():
-		if bgpType != bgpFrr || !enableWebhook {
-			return fmt.Errorf("bgp type must be frr with webhook enabled for openshift cluster")
+		if bgpType != bgpFrr {
+			return fmt.Errorf("bgp type must be frr for openshift cluster")
 		}
 		ManifestPath = fmt.Sprintf("%s/openshift", ManifestPath)
-	case enableWebhook:
-		ManifestPath = fmt.Sprintf("%s/%s-with-webhooks", ManifestPath, bgpType)
 	default:
 		ManifestPath = fmt.Sprintf("%s/%s", ManifestPath, bgpType)
 	}

@@ -202,6 +202,7 @@ spec:
         - args:
             - --port={{.MetricsPort}}
             - --log-level={{.LogLevel}}
+            - --webhook-mode=disabled
           env:
             - name: METALLB_BGP_TYPE
               value: frr
@@ -223,6 +224,9 @@ spec:
           ports:
             - containerPort: {{.MetricsPort}}
               name: monitoring
+            - containerPort: 9443
+              name: webhook-server
+              protocol: TCP
           readinessProbe:
             failureThreshold: 3
             httpGet:
@@ -527,6 +531,9 @@ spec:
       tolerations:
         - effect: NoSchedule
           key: node-role.kubernetes.io/master
+          operator: Exists
+        - effect: NoSchedule
+          key: node-role.kubernetes.io/control-plane
           operator: Exists
       volumes:
         - emptyDir: {}
