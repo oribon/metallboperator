@@ -272,9 +272,9 @@ metadata:
     capabilities: Basic Install
     categories: Networking
     certified: "false"
-    containerImage: quay.io/openshift/origin-metallb-operator:4.11
+    containerImage: quay.io/openshift/origin-metallb-operator:4.12
     createdAt: "2021-06-28 00:00:00"
-    olm.skipRange: ">=4.8.0 <4.11.0"
+    olm.skipRange: ">=4.8.0 <4.12.0"
     description: An operator for deploying MetalLB on a kubernetes cluster.
     operators.operatorframework.io/builder: operator-sdk-v1.8.0+git
     operators.operatorframework.io/project_layout: go.kubebuilder.io/v2
@@ -282,7 +282,7 @@ metadata:
     support: Red Hat
   labels:
     operatorframework.io/arch.amd64: supported
-  name: metallb-operator.v4.11.0
+  name: metallb-operator.v4.12.0
   namespace: placeholder
 spec:
   apiservicedefinitions: {}
@@ -499,17 +499,17 @@ spec:
                 - /manager
                 env:
                 - name: SPEAKER_IMAGE
-                  value: quay.io/openshift/origin-metallb:4.11
+                  value: quay.io/openshift/origin-metallb:4.12
                 - name: CONTROLLER_IMAGE
-                  value: quay.io/openshift/origin-metallb:4.11
+                  value: quay.io/openshift/origin-metallb:4.12
                 - name: ENABLE_OPERATOR_WEBHOOK
                   value: "true"
                 - name: METALLB_BGP_TYPE
                   value: frr
                 - name: FRR_IMAGE
-                  value: quay.io/openshift/origin-metallb-frr:4.11
+                  value: quay.io/openshift/origin-metallb-frr:4.12
                 - name: KUBE_RBAC_PROXY_IMAGE
-                  value: "quay.io/openshift/origin-kube-rbac-proxy:4.11"
+                  value: "quay.io/openshift/origin-kube-rbac-proxy:4.12"
                 - name: DEPLOY_KUBE_RBAC_PROXIES
                   value: "true"
                 - name: DEPLOY_PODMONITORS
@@ -530,7 +530,7 @@ spec:
                   value: "9121"
                 - name: MEMBER_LIST_BIND_PORT
                   value: "9122"
-                image: quay.io/openshift/origin-metallb-operator:4.11
+                image: quay.io/openshift/origin-metallb-operator:4.12
                 name: manager
                 resources:
                   requests:
@@ -565,7 +565,7 @@ spec:
                   env:
                     - name: METALLB_BGP_TYPE
                       value: frr
-                  image: quay.io/openshift/origin-metallb:4.11
+                  image: quay.io/openshift/origin-metallb:4.12
                   livenessProbe:
                     failureThreshold: 3
                     httpGet:
@@ -880,7 +880,7 @@ spec:
   - metallb-operator
   labels:
     olm-owner-enterprise-app: metallb-operator
-    olm-status-descriptors: metallb-operator.v4.11.0
+    olm-status-descriptors: metallb-operator.v4.12.0
   links:
   - name: MetalLB Operator
     url: https://github.com/openshift/metallb-operator
@@ -890,7 +890,7 @@ spec:
   maturity: alpha
   provider:
     name: Red Hat
-  version: 4.11.0
+  version: 4.12.0
   webhookdefinitions:
     - admissionReviewVersions:
         - v1
