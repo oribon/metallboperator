@@ -146,6 +146,9 @@ var _ = Describe("MetalLB Controller", func() {
 			})
 			Expect(err).NotTo(HaveOccurred())
 
+			metallb = &metallbv1beta1.MetalLB{}
+			err = k8sClient.Get(context.Background(), types.NamespacedName{Name: "metallb", Namespace: MetalLBTestNameSpace}, metallb)
+			Expect(err).NotTo(HaveOccurred())
 			speakerDaemonSet = &appsv1.DaemonSet{}
 			expectedTolerations := []v1.Toleration{
 				{
