@@ -219,7 +219,8 @@ metadata:
           "metadata": {
             "name": "metallb",
             "namespace": "metallb-system"
-          }
+          },
+          "spec": {}
         },
         {
           "apiVersion": "metallb.io/v1beta2",
