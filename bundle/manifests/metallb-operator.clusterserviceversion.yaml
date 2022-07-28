@@ -943,6 +943,7 @@ spec:
           apiVersions:
             - v1beta1
           operations:
+            - CREATE
             - DELETE
           resources:
             - bfdprofiles
