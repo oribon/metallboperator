@@ -515,6 +515,8 @@ spec:
                   value: "true"
                 - name: DEPLOY_PODMONITORS
                   value: "false"
+                - name: DEPLOY_SERVICEMONITORS
+                  value: "true"
                 - name: ENABLE_WEBHOOK
                   value: "true"
                 - name: OPERATOR_NAMESPACE
