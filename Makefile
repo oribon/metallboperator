@@ -153,6 +153,9 @@ build-and-push-bundle-images: docker-build docker-push  ## Generate and push bun
 	$(MAKE) bundle-index-build
 	$(MAKE) docker-push IMG=$(BUNDLE_INDEX_IMG)
 
+deploy-prometheus:
+	hack/deploy_prometheus.sh
+
 # find or download controller-gen
 # download controller-gen if necessary
 controller-gen:
@@ -214,7 +217,6 @@ endif
 generate-metallb-manifests: kubectl ## Generate MetalLB manifests
 	@echo "Generating MetalLB manifests"
 	hack/generate-metallb-manifests.sh
-	hack/generate_ocp_manifests.sh
 
 validate-metallb-manifests:  ## Validate MetalLB manifests
 	@echo "Comparing newly generated MetalLB manifests to existing ones"
