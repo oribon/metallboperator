@@ -1,9 +1,9 @@
 SHELL := /bin/bash
 
 # Current Operator version
-VERSION ?= latest
+VERSION ?= main
 CSV_VERSION = $(shell echo $(VERSION) | sed 's/v//')
-ifeq ($(VERSION), latest)
+ifeq ($(VERSION), main)
 CSV_VERSION := 0.0.0
 endif
 # Default image repo
@@ -117,7 +117,7 @@ generate: controller-gen  ## Generate code
 
 # Build the docker image
 docker-build:  ## Build the docker image
-	docker build . -t ${IMG}
+	docker buildx build --load --platform linux/amd64 -t ${IMG} --build-arg GIT_COMMIT="$(shell git rev-parse HEAD)" .
 
 docker-push:  ## Push the docker image
 	docker push ${IMG}

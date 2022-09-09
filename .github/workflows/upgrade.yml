@@ -21,9 +21,13 @@ jobs:
       built_image: "metallb-operator:ci" # Arbitrary name
     strategy:
       matrix:
-        go: [ '1.17' ]
+        go: [ '1.17' ] # this need to stay to 1.17 as long as the previous release is v0.12
     name: Go ${{ matrix.go }}
     steps:
+    - name: Cancel Previous Runs
+      uses: styfle/cancel-workflow-action@0.9.1
+      with:
+        access_token: ${{ github.token }}
     - name: Checkout Previous Release Metal LB Operator
       uses: actions/checkout@v2
       with:
@@ -38,7 +42,7 @@ jobs:
 
     - name: Build image
       run: |
-        docker build . -t ${built_image_prev_release}
+        IMG=${built_image_prev_release} make docker-build
     - name: Create K8s Kind Cluster
       run: |
         ./hack/kind-cluster-without-registry.sh
@@ -77,7 +81,7 @@ jobs:
     - name: Build image
       run: |
         cd ${GITHUB_WORKSPACE}/metallboperator-latest
-        docker build . -t ${built_image}
+        IMG=${built_image} make docker-build
         kind load docker-image ${built_image}
     - name: Deploy Metal LB Operator
       run: |
