@@ -9,6 +9,7 @@ require (
 	github.com/kennygrant/sanitize v1.2.4
 	github.com/onsi/ginkgo v1.16.5
 	github.com/onsi/gomega v1.19.0
+	github.com/open-policy-agent/cert-controller v0.5.0
 	github.com/pkg/errors v0.9.1
 	helm.sh/helm/v3 v3.9.0
 	k8s.io/api v0.24.2
