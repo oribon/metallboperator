@@ -13,6 +13,7 @@ import (
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
+	"k8s.io/client-go/util/retry"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
@@ -94,9 +95,14 @@ var _ = Describe("MetalLB Controller", func() {
 				Expect(c.Image).To(Equal(image))
 			}
 
-			By("Specify the SpeakerNodeSelector")
-			metallb.Spec.SpeakerNodeSelector = map[string]string{"kubernetes.io/os": "linux", "node-role.kubernetes.io/worker": "true"}
-			err = k8sClient.Update(context.TODO(), metallb)
+			metallb = &metallbv1beta1.MetalLB{}
+			err = retry.RetryOnConflict(retry.DefaultRetry, func() error {
+				err = k8sClient.Get(context.Background(), types.NamespacedName{Name: "metallb", Namespace: MetalLBTestNameSpace}, metallb)
+				Expect(err).NotTo(HaveOccurred())
+				By("Specify the SpeakerNodeSelector")
+				metallb.Spec.SpeakerNodeSelector = map[string]string{"kubernetes.io/os": "linux", "node-role.kubernetes.io/worker": "true"}
+				return k8sClient.Update(context.TODO(), metallb)
+			})
 			Expect(err).NotTo(HaveOccurred())
 			speakerDaemonSet = &appsv1.DaemonSet{}
 			Eventually(func() map[string]string {
@@ -109,25 +115,34 @@ var _ = Describe("MetalLB Controller", func() {
 			Expect(speakerDaemonSet).NotTo(BeZero())
 			Expect(len(speakerDaemonSet.Spec.Template.Spec.Containers)).To(BeNumerically(">", 0))
 			// Reset nodeSelector configuration
-			metallb.Spec.SpeakerNodeSelector = map[string]string{}
-			err = k8sClient.Update(context.TODO(), metallb)
+			metallb = &metallbv1beta1.MetalLB{}
+			err = retry.RetryOnConflict(retry.DefaultRetry, func() error {
+				err = k8sClient.Get(context.Background(), types.NamespacedName{Name: "metallb", Namespace: MetalLBTestNameSpace}, metallb)
+				Expect(err).NotTo(HaveOccurred())
+				metallb.Spec.SpeakerNodeSelector = map[string]string{}
+				return k8sClient.Update(context.TODO(), metallb)
+			})
 			Expect(err).NotTo(HaveOccurred())
 
-			By("Specify the speaker's Tolerations")
-			metallb.Spec.SpeakerTolerations = []v1.Toleration{
-				{
-					Key:      "example1",
-					Operator: v1.TolerationOpExists,
-					Effect:   v1.TaintEffectNoExecute,
-				},
-				{
-					Key:      "example2",
-					Operator: v1.TolerationOpExists,
-					Effect:   v1.TaintEffectNoExecute,
-				},
-			}
-
-			err = k8sClient.Update(context.TODO(), metallb)
+			metallb = &metallbv1beta1.MetalLB{}
+			err = retry.RetryOnConflict(retry.DefaultRetry, func() error {
+				err = k8sClient.Get(context.Background(), types.NamespacedName{Name: "metallb", Namespace: MetalLBTestNameSpace}, metallb)
+				Expect(err).NotTo(HaveOccurred())
+				By("Specify the speaker's Tolerations")
+				metallb.Spec.SpeakerTolerations = []v1.Toleration{
+					{
+						Key:      "example1",
+						Operator: v1.TolerationOpExists,
+						Effect:   v1.TaintEffectNoExecute,
+					},
+					{
+						Key:      "example2",
+						Operator: v1.TolerationOpExists,
+						Effect:   v1.TaintEffectNoExecute,
+					},
+				}
+				return k8sClient.Update(context.TODO(), metallb)
+			})
 			Expect(err).NotTo(HaveOccurred())
 
 			speakerDaemonSet = &appsv1.DaemonSet{}
@@ -167,8 +182,13 @@ var _ = Describe("MetalLB Controller", func() {
 			Expect(speakerDaemonSet).NotTo(BeZero())
 			Expect(len(speakerDaemonSet.Spec.Template.Spec.Containers)).To(BeNumerically(">", 0))
 			// Reset toleration configuration
-			metallb.Spec.SpeakerTolerations = nil
-			err = k8sClient.Update(context.TODO(), metallb)
+			metallb = &metallbv1beta1.MetalLB{}
+			err = retry.RetryOnConflict(retry.DefaultRetry, func() error {
+				err = k8sClient.Get(context.Background(), types.NamespacedName{Name: "metallb", Namespace: MetalLBTestNameSpace}, metallb)
+				Expect(err).NotTo(HaveOccurred())
+				metallb.Spec.SpeakerTolerations = nil
+				return k8sClient.Update(context.TODO(), metallb)
+			})
 			Expect(err).NotTo(HaveOccurred())
 		})
 
