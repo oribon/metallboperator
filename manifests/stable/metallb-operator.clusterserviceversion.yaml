@@ -389,8 +389,10 @@ spec:
             - create
             - delete
             - get
+            - list
             - patch
             - update
+            - watch
         - apiGroups:
             - metallb.io
           resources:
@@ -496,6 +498,7 @@ spec:
               containers:
               - args:
                 - --enable-leader-election
+                - --disable-cert-rotation=true
                 command:
                 - /manager
                 env:
@@ -535,11 +538,24 @@ spec:
                   value: "9122"
                 image: quay.io/openshift/origin-metallb-operator:4.12
                 name: manager
+                ports:
+                  - containerPort: 9443
+                    name: webhook-server
+                    protocol: TCP
                 resources:
                   requests:
                     cpu: 50m
                     memory: 20Mi
+                volumeMounts:
+                  - mountPath: /tmp/k8s-webhook-server/serving-certs
+                    name: cert
+                    readOnly: true
               terminationGracePeriodSeconds: 10
+              volumes:
+                - name: cert
+                  secret:
+                    defaultMode: 420
+                    secretName: metallb-operator-webhook-server-cert
       - name: metallb-operator-webhook-server
         spec:
           revisionHistoryLimit: 3
@@ -895,6 +911,26 @@ spec:
     name: Red Hat
   version: 4.12.0
   webhookdefinitions:
+    - admissionReviewVersions:
+        - v1
+      containerPort: 443
+      deploymentName: metallb-operator-controller-manager
+      failurePolicy: Fail
+      generateName: metallbvalidationwebhook.metallb.io
+      rules:
+        - apiGroups:
+            - metallb.io
+          apiVersions:
+            - v1beta1
+          operations:
+            - CREATE
+            - UPDATE
+          resources:
+            - metallbs
+      sideEffects: None
+      targetPort: 9443
+      type: ValidatingAdmissionWebhook
+      webhookPath: /validate-metallb-io-v1beta1-metallb
     - admissionReviewVersions:
         - v1
       containerPort: 443
