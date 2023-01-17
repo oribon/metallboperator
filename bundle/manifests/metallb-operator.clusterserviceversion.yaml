@@ -343,6 +343,7 @@ spec:
                 - ""
               resources:
                 - services
+                - namespaces
               verbs:
                 - get
                 - list
@@ -535,6 +536,7 @@ spec:
                 - services
                 - endpoints
                 - nodes
+                - namespaces
               verbs:
                 - get
                 - list
@@ -605,6 +607,15 @@ spec:
                       - containerPort: 9443
                         name: webhook-server
                         protocol: TCP
+                    readinessProbe:
+                      failureThreshold: 3
+                      httpGet:
+                        path: /readyz
+                        port: 8080
+                      initialDelaySeconds: 30
+                      periodSeconds: 10
+                      successThreshold: 1
+                      timeoutSeconds: 1
                     resources:
                       requests:
                         cpu: 50m
