@@ -253,7 +253,7 @@
                                 }
                             }
                         ],
-                        "image": "gcr.io/kubebuilder/kube-rbac-proxy:v0.12.0",
+                        "image": "myrepo/image:mytag",
                         "imagePullPolicy": "IfNotPresent",
                         "name": "kube-rbac-proxy",
                         "ports": [
@@ -287,7 +287,7 @@
                                 }
                             }
                         ],
-                        "image": "gcr.io/kubebuilder/kube-rbac-proxy:v0.12.0",
+                        "image": "myrepo/image:mytag",
                         "imagePullPolicy": "IfNotPresent",
                         "name": "kube-rbac-proxy-frr",
                         "ports": [
