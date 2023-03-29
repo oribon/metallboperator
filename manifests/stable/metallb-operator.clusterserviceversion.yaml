@@ -342,6 +342,12 @@ spec:
           - list
           - watch
         - apiGroups:
+            - ""
+          resources:
+            - nodes
+          verbs:
+            - list
+        - apiGroups:
           - ""
           resources:
           - services/status
@@ -808,6 +814,14 @@ spec:
             - ""
           resources:
             - secrets
+          verbs:
+            - get
+            - list
+            - watch
+        - apiGroups:
+            - ""
+          resources:
+            - configmaps
           verbs:
             - get
             - list
