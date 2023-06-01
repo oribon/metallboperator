@@ -795,6 +795,14 @@ spec:
         serviceAccountName: default
       - rules:
         - apiGroups:
+          - ""
+          resources:
+          - configmaps
+          verbs:
+          - get
+          - list
+          - watch
+        - apiGroups:
             - ""
           resources:
             - pods
