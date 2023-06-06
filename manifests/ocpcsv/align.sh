@@ -4,10 +4,27 @@ export OPERATOR_SDK=_cache/operator-sdk
 make operator-sdk
 export KUSTOMIZE=_cache/kustomize
 make kustomize
-CSV_VERSION=4.13.0
+VERSION="4.14"
+CSV_VERSION="$VERSION.0"
+
+
+sed -i 's/quay.io\/openshift\/origin-metallb:.*$/quay.io\/openshift\/origin-metallb:'"$VERSION"'/g' manifests/ocpcsv/controller-webhook-patch.yaml
+sed -i 's/quay.io\/openshift\/origin-metallb:.*$/quay.io\/openshift\/origin-metallb:'"$VERSION"'/g' manifests/ocpcsv/ocpvariables.yaml
+sed -i 's/quay.io\/openshift\/origin-metallb-frr:.*$/quay.io\/openshift\/origin-metallb-frr:'"$VERSION"'/g' manifests/ocpcsv/ocpvariables.yaml
+sed -i 's/quay.io\/openshift\/origin-kube-rbac-proxy:.*$/quay.io\/openshift\/origin-kube-rbac-proxy:'"$VERSION"'/g' manifests/ocpcsv/ocpvariables.yaml
+sed -i 's/quay.io\/openshift\/origin-metallb-operator:.*$/quay.io\/openshift\/origin-metallb-operator:'"$VERSION"'/g' manifests/ocpcsv/ocpvariables.yaml
+
+sed -i 's/quay.io\/openshift\/origin-metallb:.*$/quay.io\/openshift\/origin-metallb:'"$VERSION"'/g' manifests/stable/image-references
+sed -i 's/quay.io\/openshift\/origin-metallb-frr:.*$/quay.io\/openshift\/origin-metallb-frr:'"$VERSION"'/g' manifests/stable/image-references
+sed -i 's/quay.io\/openshift\/origin-kube-rbac-proxy:.*$/quay.io\/openshift\/origin-kube-rbac-proxy:'"$VERSION"'/g' manifests/stable/image-references
+sed -i 's/quay.io\/openshift\/origin-metallb-operator:.*$/quay.io\/openshift\/origin-metallb-operator:'"$VERSION"'/g' manifests/stable/image-references
+
+sed -i 's/quay.io\/openshift\/origin-metallb-operator:.*$/quay.io\/openshift\/origin-metallb-operator:'"$VERSION"'/g' manifests/ocpcsv/bases/metallb-operator.clusterserviceversion.yaml
+sed -i 's/olm-status-descriptors: metallb-operator.*$/olm-status-descriptors: metallb-operator.v'"$CSV_VERSION"'/g' manifests/ocpcsv/bases/metallb-operator.clusterserviceversion.yaml
+sed -i 's/>=4\.8\.0 <.*$/>=4\.8\.0 <'"$CSV_VERSION"'"/g' manifests/ocpcsv/bases/metallb-operator.clusterserviceversion.yaml
+
 
 # we need to save and restore as operatorsdk works with the local bundle.Dockerfile
-
 mv bundle.Dockerfile bundle.Dockerfile_orig
 rm -rf _cache/ocpmanifests
 
@@ -23,3 +40,5 @@ cp manifests/ocpcsv/bases/prometheus-k8s_rbac.authorization.k8s.io_v1_role.yaml 
 cp manifests/ocpcsv/bases/prometheus-k8s_rbac.authorization.k8s.io_v1_rolebinding.yaml manifests/stable/
 
 mv bundle.Dockerfile_orig bundle.Dockerfile
+sed -i 's/LABEL com.redhat.openshift.versions=.*$/LABEL com.redhat.openshift.versions="v'"$VERSION"'"/g' bundle.Dockerfile
+sed -i 's/currentCSV: metallb-operator.*$/currentCSV: metallb-operator\.v'"$CSV_VERSION"'/g' manifests/metallb-operator.package.yaml
