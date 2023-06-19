@@ -58,7 +58,7 @@ ENVTEST_ASSETS_DIR=$(shell pwd)/testbin
 test: generate fmt vet manifests ## Run unit and integration tests
 	mkdir -p ${ENVTEST_ASSETS_DIR}
 	test -f ${ENVTEST_ASSETS_DIR}/setup-envtest.sh || curl -sSLo ${ENVTEST_ASSETS_DIR}/setup-envtest.sh https://raw.githubusercontent.com/kubernetes-sigs/controller-runtime/v0.8.3/hack/setup-envtest.sh
-	source ${ENVTEST_ASSETS_DIR}/setup-envtest.sh; fetch_envtest_tools $(ENVTEST_ASSETS_DIR); setup_envtest_env $(ENVTEST_ASSETS_DIR); go test ./... -coverprofile cover.out
+	source ${ENVTEST_ASSETS_DIR}/setup-envtest.sh; fetch_envtest_tools $(ENVTEST_ASSETS_DIR); setup_envtest_env $(ENVTEST_ASSETS_DIR); go test -race ./... -coverprofile cover.out
 
 all: manager ## Default make target if no options specified
 
@@ -250,6 +250,14 @@ fetch_metallb_version: ## Updates the versions of metallb under hack/metallb_ver
 bump_versions: ## Updates the versions of the metallb-operator / metallb image with the content of hack/operator_version / metallb_version
 	@echo "Updating the operator version"
 	hack/bump_versions.sh
+
+
+
+bump_metallb: ## Bumps metallb commit ID and creates manifests. It also validates the changes.
+	@echo "Updating the metallb version"
+	hack/bump_metallb.sh
+	$(MAKE) bin
+	$(MAKE) bundle-release
 
 check_generated: ## Checks if there are any different with the current checkout
 	@echo "Checking generated files"

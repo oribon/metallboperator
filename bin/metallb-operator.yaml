@@ -387,8 +387,9 @@ spec:
                 type: integer
               communities:
                 description: The BGP communities to be associated with the announcement.
-                  Each item can be a community of the form 1234:1234 or the name of
-                  an alias defined in the Community CRD.
+                  Each item can be a standard community of the form 1234:1234, a large
+                  community of the form large:1234:1234:1234 or the name of an alias
+                  defined in the Community CRD.
                 items:
                   type: string
                 type: array
@@ -881,7 +882,8 @@ spec:
                       type: string
                     value:
                       description: The BGP community value corresponding to the given
-                        name.
+                        name. Can be a standard community of the form 1234:1234 or
+                        a large community of the form large:1234:1234:1234.
                       type: string
                   type: object
                 type: array
@@ -2276,6 +2278,13 @@ spec:
               image:
                 description: Foo is an example field of MetalLB. Edit MetalLB_types.go
                   to remove/update
+                type: string
+              loadBalancerClass:
+                description: The loadBalancerClass spec attribute that the MetalLB
+                  controller should be watching for. must be a label-style identifier,
+                  with an optional prefix such as "internal-vip" or "example.com/internal-vip".
+                  Unprefixed names are reserved for end-users.
+                pattern: ^([a-z0-9A-Z]([\w.\-]*[a-z0-9A-Z])?/)?[a-z0-9A-Z]([\w.\-]*[a-z0-9A-Z])?$
                 type: string
               logLevel:
                 description: 'Define the verbosity of the controller and the speaker
