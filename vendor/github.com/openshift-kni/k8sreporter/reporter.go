@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"os"
 	"path"
+	"strings"
 	"sync"
 	"time"
 
@@ -76,6 +77,7 @@ func New(kubeconfig string, addToScheme AddToScheme, namespaceToLog NamespaceFil
 func (r *KubernetesReporter) Dump(duration time.Duration, dumpSubpath string) {
 	since := time.Now().Add(-duration).Add(-5 * time.Second)
 
+	dumpSubpath = cleanDirName(dumpSubpath)
 	err := os.Mkdir(path.Join(r.reportPath, dumpSubpath), 0755)
 	if err != nil && !errors.Is(err, os.ErrExist) {
 		fmt.Fprintf(os.Stderr, "failed to create test dir: %v\n", err)
@@ -166,6 +168,13 @@ func (r *KubernetesReporter) logLogs(since time.Time, dirName string) {
 				fmt.Fprintf(f, "Dumping logs for pod %s-%s-%s\n", pod.Namespace, pod.Name, container.Name)
 				fmt.Fprintln(f, string(logs))
 			}
+
+			logs, err = r.clients.Pods(pod.Namespace).GetLogs(pod.Name, &v1.PodLogOptions{Container: container.Name, SinceTime: &logStart, Previous: true}).DoRaw(context.Background())
+			if err == nil {
+				fmt.Fprintf(f, fileSeparator)
+				fmt.Fprintf(f, "Dumping previous logs for pod %s-%s-%s\n", pod.Namespace, pod.Name, container.Name)
+				fmt.Fprintln(f, string(logs))
+			}
 		}
 
 	}
@@ -214,4 +223,10 @@ func logFileFor(dirName string, testName string, kind string) (*os.File, error) 
 		return nil, err
 	}
 	return f, nil
+}
+
+func cleanDirName(dirName string) string {
+	res := strings.ReplaceAll(dirName, "/", "-")
+	res = strings.ReplaceAll(res, " ", "_")
+	return res
 }
