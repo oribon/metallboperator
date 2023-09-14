@@ -8,10 +8,8 @@ import (
 	"os"
 	"path"
 	"testing"
-	"time"
 
 	. "github.com/onsi/ginkgo/v2"
-	"github.com/onsi/ginkgo/v2/types"
 	. "github.com/onsi/gomega"
 
 	"github.com/metallb/metallb-operator/test/consts"
@@ -36,7 +34,19 @@ func init() {
 }
 
 func TestE2E(t *testing.T) {
-	RegisterFailHandler(Fail)
+	// We want to collect logs before any resource is deleted in AfterEach, so we register the global fail handler
+	// in a way such that the reporter's Dump is always called before the default Fail.
+	RegisterFailHandler(func(message string, callerSkip ...int) {
+		if r != nil {
+			r.Dump(consts.LogsExtractDuration, CurrentSpecReport().FullText())
+		}
+
+		// Ensure failing line location is not affected by this wrapper
+		for i := range callerSkip {
+			callerSkip[i]++
+		}
+		Fail(message, callerSkip...)
+	})
 
 	_, reporterConfig := GinkgoConfiguration()
 
@@ -47,18 +57,9 @@ func TestE2E(t *testing.T) {
 
 	if *reportPath != "" {
 		kubeconfig := os.Getenv("KUBECONFIG")
-		r = k8sreporter.New(kubeconfig, *reportPath, OperatorNameSpace)
+		reportPath := path.Join(*reportPath, "metallb_failure_report.log")
+		r = k8sreporter.New(kubeconfig, reportPath, OperatorNameSpace)
 	}
 
 	RunSpecs(t, "Metallb Operator E2E Suite", reporterConfig)
 }
-
-var _ = ReportAfterEach(func(specReport types.SpecReport) {
-	if specReport.Failed() == false {
-		return
-	}
-
-	if r != nil {
-		r.Dump(10*time.Minute, specReport.FullText())
-	}
-})
