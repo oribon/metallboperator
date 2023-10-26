@@ -3,15 +3,15 @@ kind: ImageStream
 apiVersion: image.openshift.io/v1
 spec:
   tags:
-  - name: metallb-rhel8-operator
+  - name: metallb-rhel9-operator
     from:
       kind: DockerImage
       name: quay.io/openshift/origin-metallb-operator:4.15
-  - name: metallb-rhel8
+  - name: metallb-rhel9
     from:
       kind: DockerImage
       name: quay.io/openshift/origin-metallb:4.15
-  - name: metallb-frr-rhel8
+  - name: metallb-frr-rhel9
     from:
       kind: DockerImage
       name: quay.io/openshift/origin-metallb-frr:4.15
