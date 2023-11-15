@@ -1,0 +1,48 @@
+{
+    "apiVersion": "monitoring.coreos.com/v1",
+    "kind": "ServiceMonitor",
+    "metadata": {
+        "labels": {
+            "app": "frr-k8s",
+            "app.kubernetes.io/managed-by": "Helm",
+            "app.kubernetes.io/version": "v0.0.0",
+            "component": "frrk8s",
+            "helm.sh/chart": "frr-k8s-0.0.0"
+        },
+        "name": "frrk8s-monitor",
+        "namespace": "metallb-test-namespace"
+    },
+    "spec": {
+        "endpoints": [
+            {
+                "bearerTokenFile": "/var/run/secrets/kubernetes.io/serviceaccount/token",
+                "honorLabels": true,
+                "port": "metricshttps",
+                "scheme": "https",
+                "tlsConfig": {
+                    "insecureSkipVerify": true
+                }
+            },
+            {
+                "bearerTokenFile": "/var/run/secrets/kubernetes.io/serviceaccount/token",
+                "honorLabels": true,
+                "port": "frrmetricshttps",
+                "scheme": "https",
+                "tlsConfig": {
+                    "insecureSkipVerify": true
+                }
+            }
+        ],
+        "jobLabel": "app.kubernetes.io/name",
+        "namespaceSelector": {
+            "matchNames": [
+                "metallb-test-namespace"
+            ]
+        },
+        "selector": {
+            "matchLabels": {
+                "name": "frrk8s-monitor-service"
+            }
+        }
+    }
+}

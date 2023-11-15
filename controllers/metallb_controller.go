@@ -23,6 +23,7 @@ import (
 
 	"github.com/go-logr/logr"
 	"github.com/pkg/errors"
+	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/apimachinery/pkg/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
@@ -39,15 +40,18 @@ import (
 
 const (
 	defaultMetalLBCrName              = "metallb"
-	MetalLBChartPathController        = "./bindata/deployment/helm"
+	MetalLBChartPathController        = "./bindata/deployment/helm/metallb"
+	FRRK8SChartPathController         = "./bindata/deployment/helm/frr-k8s"
 	bgpNative                  string = "native"
 	bgpFrr                     string = "frr"
+	bgpFRRK8S                  string = "frr-k8s"
 )
 
 // MetalLBReconciler reconciles a MetalLB object
 type MetalLBReconciler struct {
 	client.Client
-	helm         *helm.MetalLBChart
+	mlbHelm      *helm.MetalLBChart
+	frrk8sHelm   *helm.FRRK8SChart
 	Log          logr.Logger
 	Scheme       *runtime.Scheme
 	PlatformInfo platform.PlatformInfo
@@ -55,6 +59,7 @@ type MetalLBReconciler struct {
 }
 
 var MetalLBChartPath = MetalLBChartPathController
+var FRRK8SChartPath = FRRK8SChartPathController
 
 // Namespace Scoped
 // +kubebuilder:rbac:groups=apps,namespace=metallb-system,resources=deployments;daemonsets,verbs=get;list;watch;create;update;patch;delete
@@ -139,14 +144,22 @@ func (r *MetalLBReconciler) SetupWithManager(mgr ctrl.Manager, bgpType string) e
 	if bgpType == "" {
 		bgpType = bgpNative
 	}
-	if bgpType != bgpNative && bgpType != bgpFrr {
+	if bgpType != bgpNative && bgpType != bgpFrr && bgpType != bgpFRRK8S {
 		return fmt.Errorf("unsupported BGP implementation type: %s", bgpType)
 	}
 	var err error
-	r.helm, err = helm.InitMetalLBChart(MetalLBChartPath, defaultMetalLBCrName, r.Namespace, r.Client, r.PlatformInfo.IsOpenShift())
+	r.mlbHelm, err = helm.InitMetalLBChart(MetalLBChartPath, defaultMetalLBCrName, r.Namespace, r.Client, r.PlatformInfo.IsOpenShift())
 	if err != nil {
 		return err
 	}
+
+	if bgpType == bgpFRRK8S {
+		r.frrk8sHelm, err = helm.InitFRRK8SChart(FRRK8SChartPath, "frr-k8s", r.Namespace, r.PlatformInfo.IsOpenShift())
+		if err != nil {
+			return err
+		}
+	}
+
 	return ctrl.NewControllerManagedBy(mgr).
 		For(&metallbv1beta1.MetalLB{}).
 		Complete(r)
@@ -156,10 +169,22 @@ func (r *MetalLBReconciler) syncMetalLBResources(config *metallbv1beta1.MetalLB)
 	logger := r.Log.WithName("syncMetalLBResources")
 	logger.Info("Start")
 	withPrometheus := prometheusDeployed(r.Client)
-	objs, err := r.helm.GetObjects(config, withPrometheus)
+
+	objs := []*unstructured.Unstructured{}
+	if r.frrk8sHelm != nil {
+		frrk8sObjs, err := r.frrk8sHelm.GetObjects(config, withPrometheus)
+		if err != nil {
+			return err
+		}
+		objs = append(objs, frrk8sObjs...)
+	}
+
+	mlbObjs, err := r.mlbHelm.GetObjects(config, withPrometheus)
 	if err != nil {
 		return err
 	}
+	objs = append(objs, mlbObjs...)
+
 	for _, obj := range objs {
 		objKind := obj.GetKind()
 		// Skip applying role and role binding object, because with the operator these are being set outside,
