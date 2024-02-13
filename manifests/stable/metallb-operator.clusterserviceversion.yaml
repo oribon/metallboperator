@@ -219,7 +219,8 @@ metadata:
           "metadata": {
             "name": "metallb",
             "namespace": "metallb-system"
-          }
+          },
+          "spec": {}
         },
         {
           "apiVersion": "metallb.io/v1beta2",
@@ -292,12 +293,6 @@ spec:
   apiservicedefinitions: {}
   customresourcedefinitions:
     owned:
-    - kind: AddressPool
-      name: addresspools.metallb.io
-      version: v1alpha1
-    - kind: AddressPool
-      name: addresspools.metallb.io
-      version: v1beta1
     - kind: BFDProfile
       name: bfdprofiles.metallb.io
       version: v1beta1
@@ -312,6 +307,12 @@ spec:
       version: v1beta2
     - kind: Community
       name: communities.metallb.io
+      version: v1beta1
+    - kind: FRRConfiguration
+      name: frrconfigurations.frrk8s.metallb.io
+      version: v1beta1
+    - kind: FRRNodeState
+      name: frrnodestates.frrk8s.metallb.io
       version: v1beta1
     - kind: IPAddressPool
       name: ipaddresspools.metallb.io
@@ -432,6 +433,90 @@ spec:
           - list
           - watch
         serviceAccountName: controller
+      - rules:
+        - apiGroups:
+            - ""
+          resources:
+            - nodes
+          verbs:
+            - get
+            - list
+            - watch
+        - apiGroups:
+            - admissionregistration.k8s.io
+          resources:
+            - validatingwebhookconfigurations
+          verbs:
+            - get
+            - list
+            - watch
+        - apiGroups:
+            - admissionregistration.k8s.io
+          resourceNames:
+            - frr-k8s-validating-webhook-configuration
+          resources:
+            - validatingwebhookconfigurations
+          verbs:
+            - update
+        - apiGroups:
+            - frrk8s.metallb.io
+          resources:
+            - frrconfigurations
+          verbs:
+            - create
+            - delete
+            - get
+            - list
+            - patch
+            - update
+            - watch
+        - apiGroups:
+            - frrk8s.metallb.io
+          resources:
+            - frrconfigurations/finalizers
+          verbs:
+            - update
+        - apiGroups:
+            - frrk8s.metallb.io
+          resources:
+            - frrconfigurations/status
+          verbs:
+            - get
+            - patch
+            - update
+        - apiGroups:
+            - frrk8s.metallb.io
+          resources:
+            - frrnodestates
+          verbs:
+            - create
+            - delete
+            - get
+            - list
+            - patch
+            - update
+            - watch
+        - apiGroups:
+            - frrk8s.metallb.io
+          resources:
+            - frrnodestates/status
+          verbs:
+            - get
+            - patch
+            - update
+        - apiGroups:
+            - authentication.k8s.io
+          resources:
+            - tokenreviews
+          verbs:
+            - create
+        - apiGroups:
+            - authorization.k8s.io
+          resources:
+            - subjectaccessreviews
+          verbs:
+            - create
+        serviceAccountName: frr-k8s-daemon
       - rules:
         - apiGroups:
           - ""
@@ -776,14 +861,6 @@ spec:
         - apiGroups:
           - metallb.io
           resources:
-          - addresspools
-          verbs:
-          - get
-          - list
-          - watch
-        - apiGroups:
-          - metallb.io
-          resources:
           - bfdprofiles
           verbs:
           - get
@@ -822,6 +899,25 @@ spec:
           - list
           - watch
         serviceAccountName: controller
+      - rules:
+          - apiGroups:
+              - ""
+            resources:
+              - secrets
+            verbs:
+              - get
+              - list
+              - watch
+              - update
+          - apiGroups:
+              - security.openshift.io
+            resourceNames:
+              - privileged
+            resources:
+              - securitycontextconstraints
+            verbs:
+              - use
+        serviceAccountName: frr-k8s-daemon
       - rules:
         - apiGroups:
           - ""
@@ -880,6 +976,16 @@ spec:
         serviceAccountName: manager-account
       - rules:
         - apiGroups:
+            - frrk8s.metallb.io
+          resources:
+            - frrconfigurations
+          verbs:
+            - get
+            - list
+            - watch
+            - create
+            - update
+        - apiGroups:
           - ""
           resources:
           - pods
@@ -897,14 +1003,6 @@ spec:
           - ""
           resources:
           - configmaps
-          verbs:
-          - get
-          - list
-          - watch
-        - apiGroups:
-          - metallb.io
-          resources:
-          - addresspools
           verbs:
           - get
           - list
@@ -997,26 +1095,6 @@ spec:
     containerPort: 443
     deploymentName: metallb-operator-webhook-server
     failurePolicy: Fail
-    generateName: addresspoolvalidationwebhook.metallb.io
-    rules:
-    - apiGroups:
-      - metallb.io
-      apiVersions:
-      - v1beta1
-      operations:
-      - CREATE
-      - UPDATE
-      resources:
-      - addresspools
-    sideEffects: None
-    targetPort: 9443
-    type: ValidatingAdmissionWebhook
-    webhookPath: /validate-metallb-io-v1beta1-addresspool
-  - admissionReviewVersions:
-    - v1
-    containerPort: 443
-    deploymentName: metallb-operator-webhook-server
-    failurePolicy: Fail
     generateName: bfdprofilevalidationwebhook.metallb.io
     rules:
     - apiGroups:
@@ -1072,6 +1150,18 @@ spec:
     targetPort: 9443
     type: ValidatingAdmissionWebhook
     webhookPath: /validate-metallb-io-v1beta2-bgppeer
+  - admissionReviewVersions:
+      - v1beta1
+      - v1beta2
+    containerPort: 443
+    conversionCRDs:
+      - bgppeers.metallb.io
+    deploymentName: metallb-operator-webhook-server
+    generateName: cbgppeers.kb.io
+    sideEffects: None
+    targetPort: 9443
+    type: ConversionWebhook
+    webhookPath: /convert
   - admissionReviewVersions:
     - v1
     containerPort: 443
@@ -1152,28 +1242,3 @@ spec:
     targetPort: 9443
     type: ValidatingAdmissionWebhook
     webhookPath: /validate-metallb-io-v1beta1-metallb
-  - type: ConversionWebhook
-    admissionReviewVersions:
-    - v1beta1
-    - v1beta2
-    targetPort: 9443
-    deploymentName: metallb-operator-webhook-server
-    generateName: metallbconversionpeer.metallb.io
-    sideEffects: None
-    webhookPath: /convert
-    conversionCRDs:
-    - bgppeers.metallb.io
-    failurePolicy: Fail
-  - type: ConversionWebhook
-    admissionReviewVersions:
-    - v1alpha1
-    - v1beta1
-    containerPort: 443
-    conversionCRDs:
-    - addresspools.metallb.io
-    deploymentName: metallb-operator-webhook-server
-    generateName: metallbconversionaddresspool.metallb.io
-    sideEffects: None
-    targetPort: 9443
-    type: ConversionWebhook
-    webhookPath: /convert
