@@ -219,7 +219,8 @@ metadata:
           "metadata": {
             "name": "metallb",
             "namespace": "metallb-system"
-          }
+          },
+          "spec": {}
         },
         {
           "apiVersion": "metallb.io/v1beta2",
@@ -272,10 +273,10 @@ metadata:
     capabilities: Basic Install
     categories: Networking
     certified: "false"
-    containerImage: quay.io/openshift/origin-metallb-operator:4.15
+    containerImage: quay.io/openshift/origin-metallb-operator:4.16
     createdAt: "2023-06-06T15:25:00Z"
     description: An operator for deploying MetalLB on a kubernetes cluster.
-    olm.skipRange: '>=4.8.0 <4.15.0'
+    olm.skipRange: '>=4.8.0 <4.16.0'
     operatorframework.io/suggested-namespace: metallb-system
     operators.openshift.io/infrastructure-features: '["disconnected"]'
     operators.operatorframework.io/builder: operator-sdk-v1.26.1
@@ -286,39 +287,48 @@ metadata:
     operatorframework.io/arch.amd64: supported
     operatorframework.io/arch.ppc64le: supported
     operatorframework.io/arch.s390x: supported
-  name: metallb-operator.v4.15.0
+  name: metallb-operator.v4.16.0
   namespace: placeholder
 spec:
   apiservicedefinitions: {}
   customresourcedefinitions:
     owned:
-    - kind: AddressPool
-      name: addresspools.metallb.io
-      version: v1alpha1
-    - kind: AddressPool
-      name: addresspools.metallb.io
-      version: v1beta1
     - kind: BFDProfile
       name: bfdprofiles.metallb.io
       version: v1beta1
+      description: BFDProfile is the Schema for the bfdprofiles API
     - kind: BGPAdvertisement
       name: bgpadvertisements.metallb.io
       version: v1beta1
+      description: BGPAdvertisement is the Schema for the bgpadvertisements API
     - kind: BGPPeer
       name: bgppeers.metallb.io
       version: v1beta1
+      description: BGPPeer is the Schema for the bgppeers API
     - kind: BGPPeer
       name: bgppeers.metallb.io
       version: v1beta2
+      description: BGPPeer is the Schema for the bgppeers API
     - kind: Community
       name: communities.metallb.io
       version: v1beta1
+      description: Community is the Schema for the communities API
+    - kind: FRRConfiguration
+      name: frrconfigurations.frrk8s.metallb.io
+      version: v1beta1
+      description: FRRConfiguration is the Schema for the frrconfigurations API
+    - kind: FRRNodeState
+      name: frrnodestates.frrk8s.metallb.io
+      version: v1beta1
+      description: FRRNodeState is the Schema for the frrnodestates API
     - kind: IPAddressPool
       name: ipaddresspools.metallb.io
       version: v1beta1
+      description: IPAddressPool is the Schema for the ipaddresspools API
     - kind: L2Advertisement
       name: l2advertisements.metallb.io
       version: v1beta1
+      description: L2Advertisement is the Schema for the l2advertisements API
     - description: MetalLB is the Schema for the metallbs API
       displayName: MetalLB
       kind: MetalLB
@@ -432,6 +442,90 @@ spec:
           - list
           - watch
         serviceAccountName: controller
+      - rules:
+        - apiGroups:
+            - ""
+          resources:
+            - nodes
+          verbs:
+            - get
+            - list
+            - watch
+        - apiGroups:
+            - admissionregistration.k8s.io
+          resources:
+            - validatingwebhookconfigurations
+          verbs:
+            - get
+            - list
+            - watch
+        - apiGroups:
+            - admissionregistration.k8s.io
+          resourceNames:
+            - frr-k8s-validating-webhook-configuration
+          resources:
+            - validatingwebhookconfigurations
+          verbs:
+            - update
+        - apiGroups:
+            - frrk8s.metallb.io
+          resources:
+            - frrconfigurations
+          verbs:
+            - create
+            - delete
+            - get
+            - list
+            - patch
+            - update
+            - watch
+        - apiGroups:
+            - frrk8s.metallb.io
+          resources:
+            - frrconfigurations/finalizers
+          verbs:
+            - update
+        - apiGroups:
+            - frrk8s.metallb.io
+          resources:
+            - frrconfigurations/status
+          verbs:
+            - get
+            - patch
+            - update
+        - apiGroups:
+            - frrk8s.metallb.io
+          resources:
+            - frrnodestates
+          verbs:
+            - create
+            - delete
+            - get
+            - list
+            - patch
+            - update
+            - watch
+        - apiGroups:
+            - frrk8s.metallb.io
+          resources:
+            - frrnodestates/status
+          verbs:
+            - get
+            - patch
+            - update
+        - apiGroups:
+            - authentication.k8s.io
+          resources:
+            - tokenreviews
+          verbs:
+            - create
+        - apiGroups:
+            - authorization.k8s.io
+          resources:
+            - subjectaccessreviews
+          verbs:
+            - create
+        serviceAccountName: frr-k8s-daemon
       - rules:
         - apiGroups:
           - ""
@@ -602,17 +696,17 @@ spec:
                 - /manager
                 env:
                 - name: SPEAKER_IMAGE
-                  value: quay.io/openshift/origin-metallb:4.15
+                  value: quay.io/openshift/origin-metallb:4.16
                 - name: CONTROLLER_IMAGE
-                  value: quay.io/openshift/origin-metallb:4.15
+                  value: quay.io/openshift/origin-metallb:4.16
                 - name: ENABLE_OPERATOR_WEBHOOK
                   value: "true"
                 - name: METALLB_BGP_TYPE
                   value: frr
                 - name: FRR_IMAGE
-                  value: quay.io/openshift/origin-metallb-frr:4.15
+                  value: quay.io/openshift/origin-metallb-frr:4.16
                 - name: KUBE_RBAC_PROXY_IMAGE
-                  value: quay.io/openshift/origin-kube-rbac-proxy:4.15
+                  value: quay.io/openshift/origin-kube-rbac-proxy:4.16
                 - name: DEPLOY_KUBE_RBAC_PROXIES
                   value: "true"
                 - name: DEPLOY_PODMONITORS
@@ -635,7 +729,7 @@ spec:
                   value: "9121"
                 - name: MEMBER_LIST_BIND_PORT
                   value: "9122"
-                image: quay.io/openshift/origin-metallb-operator:4.15
+                image: quay.io/openshift/origin-metallb-operator:4.16
                 name: manager
                 ports:
                 - containerPort: 9443
@@ -696,7 +790,7 @@ spec:
                 env:
                 - name: METALLB_BGP_TYPE
                   value: frr
-                image: quay.io/openshift/origin-metallb:4.15
+                image: quay.io/openshift/origin-metallb:4.16
                 livenessProbe:
                   failureThreshold: 3
                   httpGet:
@@ -776,14 +870,6 @@ spec:
         - apiGroups:
           - metallb.io
           resources:
-          - addresspools
-          verbs:
-          - get
-          - list
-          - watch
-        - apiGroups:
-          - metallb.io
-          resources:
           - bfdprofiles
           verbs:
           - get
@@ -822,6 +908,25 @@ spec:
           - list
           - watch
         serviceAccountName: controller
+      - rules:
+          - apiGroups:
+              - ""
+            resources:
+              - secrets
+            verbs:
+              - get
+              - list
+              - watch
+              - update
+          - apiGroups:
+              - security.openshift.io
+            resourceNames:
+              - privileged
+            resources:
+              - securitycontextconstraints
+            verbs:
+              - use
+        serviceAccountName: frr-k8s-daemon
       - rules:
         - apiGroups:
           - ""
@@ -880,6 +985,16 @@ spec:
         serviceAccountName: manager-account
       - rules:
         - apiGroups:
+            - frrk8s.metallb.io
+          resources:
+            - frrconfigurations
+          verbs:
+            - get
+            - list
+            - watch
+            - create
+            - update
+        - apiGroups:
           - ""
           resources:
           - pods
@@ -897,14 +1012,6 @@ spec:
           - ""
           resources:
           - configmaps
-          verbs:
-          - get
-          - list
-          - watch
-        - apiGroups:
-          - metallb.io
-          resources:
-          - addresspools
           verbs:
           - get
           - list
@@ -980,38 +1087,20 @@ spec:
   - metallb-operator
   labels:
     olm-owner-enterprise-app: metallb-operator
-    olm-status-descriptors: metallb-operator.v4.15.0
+    olm-status-descriptors: metallb-operator.v4.16.0
   links:
   - name: MetalLB Operator
     url: https://github.com/openshift/metallb-operator
   maintainers:
-  - email: rbryant@redhat.com
-    name: Russell Bryant
+  - email: fpaoline@redhat.com
+    name: Federico Paolinelli
+  - email: obraunsh@redhat.com
+    name: Ori Braunshtein
   maturity: alpha
   provider:
-    name: Community
-  version: 4.15.0
+    name: Red Hat
+  version: 4.16.0
   webhookdefinitions:
-  - admissionReviewVersions:
-    - v1
-    containerPort: 443
-    deploymentName: metallb-operator-webhook-server
-    failurePolicy: Fail
-    generateName: addresspoolvalidationwebhook.metallb.io
-    rules:
-    - apiGroups:
-      - metallb.io
-      apiVersions:
-      - v1beta1
-      operations:
-      - CREATE
-      - UPDATE
-      resources:
-      - addresspools
-    sideEffects: None
-    targetPort: 9443
-    type: ValidatingAdmissionWebhook
-    webhookPath: /validate-metallb-io-v1beta1-addresspool
   - admissionReviewVersions:
     - v1
     containerPort: 443
@@ -1072,6 +1161,18 @@ spec:
     targetPort: 9443
     type: ValidatingAdmissionWebhook
     webhookPath: /validate-metallb-io-v1beta2-bgppeer
+  - admissionReviewVersions:
+      - v1beta1
+      - v1beta2
+    containerPort: 443
+    conversionCRDs:
+      - bgppeers.metallb.io
+    deploymentName: metallb-operator-webhook-server
+    generateName: cbgppeers.kb.io
+    sideEffects: None
+    targetPort: 9443
+    type: ConversionWebhook
+    webhookPath: /convert
   - admissionReviewVersions:
     - v1
     containerPort: 443
@@ -1152,28 +1253,3 @@ spec:
     targetPort: 9443
     type: ValidatingAdmissionWebhook
     webhookPath: /validate-metallb-io-v1beta1-metallb
-  - type: ConversionWebhook
-    admissionReviewVersions:
-    - v1beta1
-    - v1beta2
-    targetPort: 9443
-    deploymentName: metallb-operator-webhook-server
-    generateName: metallbconversionpeer.metallb.io
-    sideEffects: None
-    webhookPath: /convert
-    conversionCRDs:
-    - bgppeers.metallb.io
-    failurePolicy: Fail
-  - type: ConversionWebhook
-    admissionReviewVersions:
-    - v1alpha1
-    - v1beta1
-    containerPort: 443
-    conversionCRDs:
-    - addresspools.metallb.io
-    deploymentName: metallb-operator-webhook-server
-    generateName: metallbconversionaddresspool.metallb.io
-    sideEffects: None
-    targetPort: 9443
-    type: ConversionWebhook
-    webhookPath: /convert

@@ -1,0 +1,95 @@
+{
+    "apiVersion": "monitoring.coreos.com/v1",
+    "kind": "ServiceMonitor",
+    "metadata": {
+        "annotations": {
+            "service.beta.openshift.io/serving-cert-secret-name": "frr-k8s-certs-secret"
+        },
+        "labels": {
+            "app": "frr-k8s",
+            "app.kubernetes.io/managed-by": "Helm",
+            "app.kubernetes.io/version": "v0.0.8",
+            "component": "frr-k8s",
+            "helm.sh/chart": "frr-k8s-0.0.8"
+        },
+        "name": "frr-k8s-monitor",
+        "namespace": "metallb-test-namespace"
+    },
+    "spec": {
+        "endpoints": [
+            {
+                "bearerTokenFile": "/var/run/secrets/kubernetes.io/serviceaccount/token",
+                "honorLabels": true,
+                "metricRelabelings": [
+                    {
+                        "regex": "frrk8s_bgp_(.*)",
+                        "replacement": "metallb_bgp_$1",
+                        "sourceLabels": [
+                            "__name__"
+                        ],
+                        "targetLabel": "__name__"
+                    },
+                    {
+                        "regex": "frrk8s_bfd_(.*)",
+                        "replacement": "metallb_bfd_$1",
+                        "sourceLabels": [
+                            "__name__"
+                        ],
+                        "targetLabel": "__name__"
+                    }
+                ],
+                "port": "metricshttps",
+                "scheme": "https",
+                "tlsConfig": {
+                    "caFile": "/etc/prometheus/configmaps/serving-certs-ca-bundle/service-ca.crt",
+                    "certFile": "/etc/prometheus/secrets/metrics-client-certs/tls.crt",
+                    "insecureSkipVerify": false,
+                    "keyFile": "/etc/prometheus/secrets/metrics-client-certs/tls.key",
+                    "serverName": "frr-k8s-monitor-service.metallb-test-namespace.svc"
+                }
+            },
+            {
+                "bearerTokenFile": "/var/run/secrets/kubernetes.io/serviceaccount/token",
+                "honorLabels": true,
+                "metricRelabelings": [
+                    {
+                        "regex": "frrk8s_bgp_(.*)",
+                        "replacement": "metallb_bgp_$1",
+                        "sourceLabels": [
+                            "__name__"
+                        ],
+                        "targetLabel": "__name__"
+                    },
+                    {
+                        "regex": "frrk8s_bfd_(.*)",
+                        "replacement": "metallb_bfd_$1",
+                        "sourceLabels": [
+                            "__name__"
+                        ],
+                        "targetLabel": "__name__"
+                    }
+                ],
+                "port": "frrmetricshttps",
+                "scheme": "https",
+                "tlsConfig": {
+                    "caFile": "/etc/prometheus/configmaps/serving-certs-ca-bundle/service-ca.crt",
+                    "certFile": "/etc/prometheus/secrets/metrics-client-certs/tls.crt",
+                    "insecureSkipVerify": false,
+                    "keyFile": "/etc/prometheus/secrets/metrics-client-certs/tls.key",
+                    "serverName": "frr-k8s-monitor-service.metallb-test-namespace.svc"
+                }
+            }
+        ],
+        "jobLabel": "app.kubernetes.io/name",
+        "namespaceSelector": {
+            "matchNames": [
+                "metallb-test-namespace"
+            ]
+        },
+        "selector": {
+            "matchLabels": {
+                "name": "frr-k8s-monitor-service"
+            }
+        }
+    }
+}

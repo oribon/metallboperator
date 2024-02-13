@@ -24,5 +24,8 @@ subjects:
   - kind: ServiceAccount
     name: speaker
     namespace: metallb-system
+  - kind: ServiceAccount
+    name: frr-k8s-daemon
+    namespace: metallb-system
 ---
 

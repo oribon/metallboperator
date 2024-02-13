@@ -67,10 +67,11 @@ test-validation: generate fmt vet manifests  ## Run validation tests
 	mkdir -p ${VALIDATION_TESTS_REPORTS_PATH}
 	USE_LOCAL_RESOURCES=true go test --tags=validationtests -v ./test/e2e/validation -ginkgo.v -junit $(VALIDATION_TESTS_REPORTS_PATH) -report $(VALIDATION_TESTS_REPORTS_PATH)
 
+SKIP ?= ""
 test-functional: generate fmt vet manifests  ## Run e2e tests
 	rm -rf ${TESTS_REPORTS_PATH}
 	mkdir -p ${TESTS_REPORTS_PATH}
-	USE_LOCAL_RESOURCES=true go test --tags=e2etests -v ./test/e2e/functional -ginkgo.v -junit $(TESTS_REPORTS_PATH) -report $(TESTS_REPORTS_PATH)
+	USE_LOCAL_RESOURCES=true go test --tags=e2etests -v ./test/e2e/functional -ginkgo.v --ginkgo.skip=${SKIP} -junit $(TESTS_REPORTS_PATH) -report $(TESTS_REPORTS_PATH)
 
 test-e2e: generate fmt vet manifests test-validation test-functional  ## Run e2e tests
 
@@ -143,7 +144,7 @@ bundle: operator-sdk manifests  ## Generate bundle manifests and metadata, then 
 	ls -d config/crd/bases/* | grep -v metallb.io_metallbs | xargs -I{} cp {} bundle/manifests/
 	$(OPERATOR_SDK) generate kustomize manifests --interactive=false -q
 	cd config/manager && $(KUSTOMIZE) edit set image controller=$(IMG)
-	$(KUSTOMIZE) build config/manifests | $(OPERATOR_SDK) generate bundle -q --overwrite --version $(CSV_VERSION) $(BUNDLE_METADATA_OPTS) --extra-service-accounts "controller,speaker"
+	$(KUSTOMIZE) build config/manifests | $(OPERATOR_SDK) generate bundle -q --overwrite --version $(CSV_VERSION) $(BUNDLE_METADATA_OPTS) --extra-service-accounts "controller,speaker,frr-k8s-daemon"
 	$(OPERATOR_SDK) bundle validate ./bundle
 
 bundle-release: kustomize bundle bump_versions  ## Generate the bundle manifests for a PR

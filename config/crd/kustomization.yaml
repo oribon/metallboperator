@@ -3,13 +3,14 @@
 # It should be run by config/default
 resources:
   - bases/metallb.io_metallbs.yaml
-  - bases/metallb.io_addresspools.yaml
   - bases/metallb.io_bgppeers.yaml
   - bases/metallb.io_bfdprofiles.yaml
   - bases/metallb.io_ipaddresspools.yaml
   - bases/metallb.io_l2advertisements.yaml
   - bases/metallb.io_bgpadvertisements.yaml
   - bases/metallb.io_communities.yaml
+  - bases/frrk8s.metallb.io_frrconfigurations.yaml
+  - bases/frrk8s.metallb.io_frrnodestates.yaml
 
 # +kubebuilder:scaffold:crdkustomizeresource
 
@@ -18,10 +19,6 @@ configurations:
   - kustomizeconfig.yaml
 
 patches:
-- path: patches/crd-conversion-patch-addresspools.yaml
-  target:
-    kind: CustomResourceDefinition
-    name: addresspools.metallb.io
 - path: patches/crd-conversion-patch-bgppeers.yaml
   target:
     kind: CustomResourceDefinition

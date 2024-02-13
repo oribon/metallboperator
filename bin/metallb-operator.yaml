@@ -11,213 +11,6 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.11.1
   creationTimestamp: null
-  name: addresspools.metallb.io
-spec:
-  conversion:
-    strategy: Webhook
-    webhook:
-      clientConfig:
-        caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tDQpNSUlGWlRDQ0EwMmdBd0lCQWdJVU5GRW1XcTM3MVpKdGkrMmlSQzk1WmpBV1MxZ3dEUVlKS29aSWh2Y05BUUVMDQpCUUF3UWpFTE1Ba0dBMVVFQmhNQ1dGZ3hGVEFUQmdOVkJBY01ERVJsWm1GMWJIUWdRMmwwZVRFY01Cb0dBMVVFDQpDZ3dUUkdWbVlYVnNkQ0JEYjIxd1lXNTVJRXgwWkRBZUZ3MHlNakEzTVRrd09UTXlNek5hRncweU1qQTRNVGd3DQpPVE15TXpOYU1FSXhDekFKQmdOVkJBWVRBbGhZTVJVd0V3WURWUVFIREF4RVpXWmhkV3gwSUVOcGRIa3hIREFhDQpCZ05WQkFvTUUwUmxabUYxYkhRZ1EyOXRjR0Z1ZVNCTWRHUXdnZ0lpTUEwR0NTcUdTSWIzRFFFQkFRVUFBNElDDQpEd0F3Z2dJS0FvSUNBUUNxVFpxMWZRcC9vYkdlenhES0o3OVB3Ny94azJwellualNzMlkzb1ZYSm5sRmM4YjVlDQpma2ZZQnY2bndscW1keW5PL2phWFBaQmRQSS82aFdOUDBkdVhadEtWU0NCUUpyZzEyOGNXb3F0MGNTN3pLb1VpDQpvcU1tQ0QvRXVBeFFNZjhRZDF2c1gvVllkZ0poVTZBRXJLZEpIaXpFOUJtUkNkTDBGMW1OVW55Rk82UnRtWFZUDQpidkxsTDVYeTc2R0FaQVBLOFB4aVlDa0NtbDdxN0VnTWNiOXlLWldCYmlxQ3VkTXE5TGJLNmdKNzF6YkZnSXV4DQo1L1pXK2JraTB2RlplWk9ZODUxb1psckFUNzJvMDI4NHNTWW9uN0pHZVZkY3NoUnh5R1VpSFpSTzdkaXZVTDVTDQpmM2JmSDFYbWY1ZDQzT0NWTWRuUUV2NWVaOG8zeWVLa3ZrbkZQUGVJMU9BbjdGbDlFRVNNR2dhOGFaSG1URSttDQpsLzlMSmdDYjBnQmtPT0M0WnV4bWh2aERKV1EzWnJCS3pMQlNUZXN0NWlLNVlwcXRWVVk2THRyRW9FelVTK1lsDQpwWndXY2VQWHlHeHM5ZURsR3lNVmQraW15Y3NTU1UvVno2Mmx6MnZCS21NTXBkYldDQWhud0RsRTVqU2dyMjRRDQp0eGNXLys2N3d5KzhuQlI3UXdqVTFITndVRjBzeERWdEwrZ1NHVERnSEVZSlhZelYvT05zMy94TkpoVFNPSkxNDQpoeXNVdyttaGdackdhbUdXcHVIVU1DUitvTWJzMTc1UkcrQjJnUFFHVytPTjJnUTRyOXN2b0ZBNHBBQm8xd1dLDQpRYjRhY3pmeVVscElBOVFoSmFsZEY3S3dPSHVlV3gwRUNrNXg0T2tvVDBvWVp0dzFiR0JjRGtaSmF3SURBUUFCDQpvMU13VVRBZEJnTlZIUTRFRmdRVW90UlNIUm9IWTEyRFZ4R0NCdEhpb1g2ZmVFQXdId1lEVlIwakJCZ3dGb0FVDQpvdFJTSFJvSFkxMkRWeEdDQnRIaW9YNmZlRUF3RHdZRFZSMFRBUUgvQkFVd0F3RUIvekFOQmdrcWhraUc5dzBCDQpBUXNGQUFPQ0FnRUFSbkpsWWRjMTFHd0VxWnh6RDF2R3BDR2pDN2VWTlQ3aVY1d3IybXlybHdPYi9aUWFEa0xYDQpvVStaOVVXT1VlSXJTdzUydDdmQUpvVVAwSm5iYkMveVIrU1lqUGhvUXNiVHduOTc2ZldBWTduM3FMOXhCd1Y0DQphek41OXNjeUp0dlhMeUtOL2N5ak1ReDRLajBIMFg0bWJ6bzVZNUtzWWtYVU0vOEFPdWZMcEd0S1NGVGgrSEFDDQpab1Q5YnZHS25adnNHd0tYZFF0Wnh0akhaUjVqK3U3ZGtQOTJBT051RFNabS8rWVV4b2tBK09JbzdSR3BwSHNXDQo1ZTdNY0FTVXRtb1FORXd6dVFoVkJaRWQ1OGtKYjUrV0VWbGNzanlXNnRTbzErZ25tTWNqR1BsMWgxR2hVbjV4DQpFY0lWRnBIWXM5YWo1NmpBSjk1MVQvZjhMaWxmTlVnanBLQ0c1bnl0SUt3emxhOHNtdGlPdm1UNEpYbXBwSkI2DQo4bmdHRVluVjUrUTYwWFJ2OEhSSGp1VG9CRHVhaERrVDA2R1JGODU1d09FR2V4bkZpMXZYWUxLVllWb1V2MXRKDQo4dVdUR1pwNllDSVJldlBqbzg5ZytWTlJSaVFYUThJd0dybXE5c0RoVTlqTjA0SjdVL1RvRDFpNHE3VnlsRUc5DQorV1VGNkNLaEdBeTJIaEhwVncyTGFoOS9lUzdZMUZ1YURrWmhPZG1laG1BOCtqdHNZamJadnR5Mm1SWlF0UUZzDQpUU1VUUjREbUR2bVVPRVRmeStpRHdzK2RkWXVNTnJGeVVYV2dkMnpBQU4ydVl1UHFGY2pRcFNPODFzVTJTU3R3DQoxVzAyeUtYOGJEYmZFdjBzbUh3UzliQnFlSGo5NEM1Mjg0YXpsdTBmaUdpTm1OUEM4ckJLRmhBPQ0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQ==
-        service:
-          name: webhook-service
-          namespace: metallb-system
-          path: /convert
-      conversionReviewVersions:
-      - v1alpha1
-      - v1beta1
-  group: metallb.io
-  names:
-    kind: AddressPool
-    listKind: AddressPoolList
-    plural: addresspools
-    singular: addresspool
-  scope: Namespaced
-  versions:
-  - deprecated: true
-    deprecationWarning: metallb.io v1alpha1 AddressPool is deprecated
-    name: v1alpha1
-    schema:
-      openAPIV3Schema:
-        description: AddressPool is the Schema for the addresspools API.
-        properties:
-          apiVersion:
-            description: 'APIVersion defines the versioned schema of this representation
-              of an object. Servers should convert recognized schemas to the latest
-              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
-            type: string
-          kind:
-            description: 'Kind is a string value representing the REST resource this
-              object represents. Servers may infer this from the endpoint the client
-              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
-            type: string
-          metadata:
-            type: object
-          spec:
-            description: AddressPoolSpec defines the desired state of AddressPool.
-            properties:
-              addresses:
-                description: A list of IP address ranges over which MetalLB has authority.
-                  You can list multiple ranges in a single pool, they will all share
-                  the same settings. Each range can be either a CIDR prefix, or an
-                  explicit start-end range of IPs.
-                items:
-                  type: string
-                type: array
-              autoAssign:
-                default: true
-                description: AutoAssign flag used to prevent MetallB from automatic
-                  allocation for a pool.
-                type: boolean
-              bgpAdvertisements:
-                description: When an IP is allocated from this pool, how should it
-                  be translated into BGP announcements?
-                items:
-                  properties:
-                    aggregationLength:
-                      default: 32
-                      description: The aggregation-length advertisement option lets
-                        you “roll up” the /32s into a larger prefix.
-                      format: int32
-                      minimum: 1
-                      type: integer
-                    aggregationLengthV6:
-                      default: 128
-                      description: Optional, defaults to 128 (i.e. no aggregation)
-                        if not specified.
-                      format: int32
-                      type: integer
-                    communities:
-                      description: BGP communities
-                      items:
-                        type: string
-                      type: array
-                    localPref:
-                      description: BGP LOCAL_PREF attribute which is used by BGP best
-                        path algorithm, Path with higher localpref is preferred over
-                        one with lower localpref.
-                      format: int32
-                      type: integer
-                  type: object
-                type: array
-              protocol:
-                description: Protocol can be used to select how the announcement is
-                  done.
-                enum:
-                - layer2
-                - bgp
-                type: string
-            required:
-            - addresses
-            - protocol
-            type: object
-          status:
-            description: AddressPoolStatus defines the observed state of AddressPool.
-            type: object
-        required:
-        - spec
-        type: object
-    served: true
-    storage: false
-    subresources:
-      status: {}
-  - deprecated: true
-    deprecationWarning: metallb.io v1beta1 AddressPool is deprecated, consider using
-      IPAddressPool
-    name: v1beta1
-    schema:
-      openAPIV3Schema:
-        description: AddressPool represents a pool of IP addresses that can be allocated
-          to LoadBalancer services. AddressPool is deprecated and being replaced by
-          IPAddressPool.
-        properties:
-          apiVersion:
-            description: 'APIVersion defines the versioned schema of this representation
-              of an object. Servers should convert recognized schemas to the latest
-              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
-            type: string
-          kind:
-            description: 'Kind is a string value representing the REST resource this
-              object represents. Servers may infer this from the endpoint the client
-              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
-            type: string
-          metadata:
-            type: object
-          spec:
-            description: AddressPoolSpec defines the desired state of AddressPool.
-            properties:
-              addresses:
-                description: A list of IP address ranges over which MetalLB has authority.
-                  You can list multiple ranges in a single pool, they will all share
-                  the same settings. Each range can be either a CIDR prefix, or an
-                  explicit start-end range of IPs.
-                items:
-                  type: string
-                type: array
-              autoAssign:
-                default: true
-                description: AutoAssign flag used to prevent MetallB from automatic
-                  allocation for a pool.
-                type: boolean
-              bgpAdvertisements:
-                description: Drives how an IP allocated from this pool should translated
-                  into BGP announcements.
-                items:
-                  properties:
-                    aggregationLength:
-                      default: 32
-                      description: The aggregation-length advertisement option lets
-                        you “roll up” the /32s into a larger prefix.
-                      format: int32
-                      minimum: 1
-                      type: integer
-                    aggregationLengthV6:
-                      default: 128
-                      description: Optional, defaults to 128 (i.e. no aggregation)
-                        if not specified.
-                      format: int32
-                      type: integer
-                    communities:
-                      description: BGP communities to be associated with the given
-                        advertisement.
-                      items:
-                        type: string
-                      type: array
-                    localPref:
-                      description: BGP LOCAL_PREF attribute which is used by BGP best
-                        path algorithm, Path with higher localpref is preferred over
-                        one with lower localpref.
-                      format: int32
-                      type: integer
-                  type: object
-                type: array
-              protocol:
-                description: Protocol can be used to select how the announcement is
-                  done.
-                enum:
-                - layer2
-                - bgp
-                type: string
-            required:
-            - addresses
-            - protocol
-            type: object
-          status:
-            description: AddressPoolStatus defines the observed state of AddressPool.
-            type: object
-        required:
-        - spec
-        type: object
-    served: true
-    storage: true
-    subresources:
-      status: {}
----
-apiVersion: apiextensions.k8s.io/v1
-kind: CustomResourceDefinition
-metadata:
-  annotations:
-    controller-gen.kubebuilder.io/version: v0.11.1
-  creationTimestamp: null
   name: bfdprofiles.metallb.io
 spec:
   group: metallb.io
@@ -542,7 +335,7 @@ spec:
       clientConfig:
         caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tDQpNSUlGWlRDQ0EwMmdBd0lCQWdJVU5GRW1XcTM3MVpKdGkrMmlSQzk1WmpBV1MxZ3dEUVlKS29aSWh2Y05BUUVMDQpCUUF3UWpFTE1Ba0dBMVVFQmhNQ1dGZ3hGVEFUQmdOVkJBY01ERVJsWm1GMWJIUWdRMmwwZVRFY01Cb0dBMVVFDQpDZ3dUUkdWbVlYVnNkQ0JEYjIxd1lXNTVJRXgwWkRBZUZ3MHlNakEzTVRrd09UTXlNek5hRncweU1qQTRNVGd3DQpPVE15TXpOYU1FSXhDekFKQmdOVkJBWVRBbGhZTVJVd0V3WURWUVFIREF4RVpXWmhkV3gwSUVOcGRIa3hIREFhDQpCZ05WQkFvTUUwUmxabUYxYkhRZ1EyOXRjR0Z1ZVNCTWRHUXdnZ0lpTUEwR0NTcUdTSWIzRFFFQkFRVUFBNElDDQpEd0F3Z2dJS0FvSUNBUUNxVFpxMWZRcC9vYkdlenhES0o3OVB3Ny94azJwellualNzMlkzb1ZYSm5sRmM4YjVlDQpma2ZZQnY2bndscW1keW5PL2phWFBaQmRQSS82aFdOUDBkdVhadEtWU0NCUUpyZzEyOGNXb3F0MGNTN3pLb1VpDQpvcU1tQ0QvRXVBeFFNZjhRZDF2c1gvVllkZ0poVTZBRXJLZEpIaXpFOUJtUkNkTDBGMW1OVW55Rk82UnRtWFZUDQpidkxsTDVYeTc2R0FaQVBLOFB4aVlDa0NtbDdxN0VnTWNiOXlLWldCYmlxQ3VkTXE5TGJLNmdKNzF6YkZnSXV4DQo1L1pXK2JraTB2RlplWk9ZODUxb1psckFUNzJvMDI4NHNTWW9uN0pHZVZkY3NoUnh5R1VpSFpSTzdkaXZVTDVTDQpmM2JmSDFYbWY1ZDQzT0NWTWRuUUV2NWVaOG8zeWVLa3ZrbkZQUGVJMU9BbjdGbDlFRVNNR2dhOGFaSG1URSttDQpsLzlMSmdDYjBnQmtPT0M0WnV4bWh2aERKV1EzWnJCS3pMQlNUZXN0NWlLNVlwcXRWVVk2THRyRW9FelVTK1lsDQpwWndXY2VQWHlHeHM5ZURsR3lNVmQraW15Y3NTU1UvVno2Mmx6MnZCS21NTXBkYldDQWhud0RsRTVqU2dyMjRRDQp0eGNXLys2N3d5KzhuQlI3UXdqVTFITndVRjBzeERWdEwrZ1NHVERnSEVZSlhZelYvT05zMy94TkpoVFNPSkxNDQpoeXNVdyttaGdackdhbUdXcHVIVU1DUitvTWJzMTc1UkcrQjJnUFFHVytPTjJnUTRyOXN2b0ZBNHBBQm8xd1dLDQpRYjRhY3pmeVVscElBOVFoSmFsZEY3S3dPSHVlV3gwRUNrNXg0T2tvVDBvWVp0dzFiR0JjRGtaSmF3SURBUUFCDQpvMU13VVRBZEJnTlZIUTRFRmdRVW90UlNIUm9IWTEyRFZ4R0NCdEhpb1g2ZmVFQXdId1lEVlIwakJCZ3dGb0FVDQpvdFJTSFJvSFkxMkRWeEdDQnRIaW9YNmZlRUF3RHdZRFZSMFRBUUgvQkFVd0F3RUIvekFOQmdrcWhraUc5dzBCDQpBUXNGQUFPQ0FnRUFSbkpsWWRjMTFHd0VxWnh6RDF2R3BDR2pDN2VWTlQ3aVY1d3IybXlybHdPYi9aUWFEa0xYDQpvVStaOVVXT1VlSXJTdzUydDdmQUpvVVAwSm5iYkMveVIrU1lqUGhvUXNiVHduOTc2ZldBWTduM3FMOXhCd1Y0DQphek41OXNjeUp0dlhMeUtOL2N5ak1ReDRLajBIMFg0bWJ6bzVZNUtzWWtYVU0vOEFPdWZMcEd0S1NGVGgrSEFDDQpab1Q5YnZHS25adnNHd0tYZFF0Wnh0akhaUjVqK3U3ZGtQOTJBT051RFNabS8rWVV4b2tBK09JbzdSR3BwSHNXDQo1ZTdNY0FTVXRtb1FORXd6dVFoVkJaRWQ1OGtKYjUrV0VWbGNzanlXNnRTbzErZ25tTWNqR1BsMWgxR2hVbjV4DQpFY0lWRnBIWXM5YWo1NmpBSjk1MVQvZjhMaWxmTlVnanBLQ0c1bnl0SUt3emxhOHNtdGlPdm1UNEpYbXBwSkI2DQo4bmdHRVluVjUrUTYwWFJ2OEhSSGp1VG9CRHVhaERrVDA2R1JGODU1d09FR2V4bkZpMXZYWUxLVllWb1V2MXRKDQo4dVdUR1pwNllDSVJldlBqbzg5ZytWTlJSaVFYUThJd0dybXE5c0RoVTlqTjA0SjdVL1RvRDFpNHE3VnlsRUc5DQorV1VGNkNLaEdBeTJIaEhwVncyTGFoOS9lUzdZMUZ1YURrWmhPZG1laG1BOCtqdHNZamJadnR5Mm1SWlF0UUZzDQpUU1VUUjREbUR2bVVPRVRmeStpRHdzK2RkWXVNTnJGeVVYV2dkMnpBQU4ydVl1UHFGY2pRcFNPODFzVTJTU3R3DQoxVzAyeUtYOGJEYmZFdjBzbUh3UzliQnFlSGo5NEM1Mjg0YXpsdTBmaUdpTm1OUEM4ckJLRmhBPQ0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQ==
         service:
-          name: webhook-service
+          name: metallb-webhook-service
           namespace: metallb-system
           path: /convert
       conversionReviewVersions:
@@ -710,6 +503,16 @@ spec:
                   associated to the BGP session. If not set, the BFD session won't
                   be set up.
                 type: string
+              connectTime:
+                description: Requested BGP connect time, controls how long BGP waits
+                  between connection attempts to a neighbor.
+                type: string
+                x-kubernetes-validations:
+                - message: connect time should be between 1 seconds to 65535
+                  rule: duration(self).getSeconds() >= 1 && duration(self).getSeconds()
+                    <= 65535
+                - message: connect time should contain a whole number of seconds
+                  rule: duration(self).getMilliseconds() % 1000 == 0
               ebgpMultiHop:
                 description: To set if the BGPPeer is multi-hops away. Needed for
                   FRR mode only.
@@ -890,6 +693,471 @@ spec:
             type: object
           status:
             description: CommunityStatus defines the observed state of Community.
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.11.3
+  creationTimestamp: null
+  name: frrconfigurations.frrk8s.metallb.io
+spec:
+  group: frrk8s.metallb.io
+  names:
+    kind: FRRConfiguration
+    listKind: FRRConfigurationList
+    plural: frrconfigurations
+    singular: frrconfiguration
+  scope: Namespaced
+  versions:
+  - name: v1beta1
+    schema:
+      openAPIV3Schema:
+        description: FRRConfiguration is a piece of FRR configuration.
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: FRRConfigurationSpec defines the desired state of FRRConfiguration.
+            properties:
+              bgp:
+                description: BGP is the configuration related to the BGP protocol.
+                properties:
+                  bfdProfiles:
+                    description: BFDProfiles is the list of bfd profiles to be used
+                      when configuring the neighbors.
+                    items:
+                      description: BFDProfile is the configuration related to the
+                        BFD protocol associated to a BGP session.
+                      properties:
+                        detectMultiplier:
+                          description: Configures the detection multiplier to determine
+                            packet loss. The remote transmission interval will be
+                            multiplied by this value to determine the connection loss
+                            detection timer.
+                          format: int32
+                          maximum: 255
+                          minimum: 2
+                          type: integer
+                        echoInterval:
+                          description: Configures the minimal echo receive transmission
+                            interval that this system is capable of handling in milliseconds.
+                            Defaults to 50ms
+                          format: int32
+                          maximum: 60000
+                          minimum: 10
+                          type: integer
+                        echoMode:
+                          description: Enables or disables the echo transmission mode.
+                            This mode is disabled by default, and not supported on
+                            multi hops setups.
+                          type: boolean
+                        minimumTtl:
+                          description: 'For multi hop sessions only: configure the
+                            minimum expected TTL for an incoming BFD control packet.'
+                          format: int32
+                          maximum: 254
+                          minimum: 1
+                          type: integer
+                        name:
+                          description: The name of the BFD Profile to be referenced
+                            in other parts of the configuration.
+                          type: string
+                        passiveMode:
+                          description: 'Mark session as passive: a passive session
+                            will not attempt to start the connection and will wait
+                            for control packets from peer before it begins replying.'
+                          type: boolean
+                        receiveInterval:
+                          description: The minimum interval that this system is capable
+                            of receiving control packets in milliseconds. Defaults
+                            to 300ms.
+                          format: int32
+                          maximum: 60000
+                          minimum: 10
+                          type: integer
+                        transmitInterval:
+                          description: The minimum transmission interval (less jitter)
+                            that this system wants to use to send BFD control packets
+                            in milliseconds. Defaults to 300ms
+                          format: int32
+                          maximum: 60000
+                          minimum: 10
+                          type: integer
+                      required:
+                      - name
+                      type: object
+                    type: array
+                  routers:
+                    description: Routers is the list of routers we want FRR to configure
+                      (one per VRF).
+                    items:
+                      description: Router represent a neighbor router we want FRR
+                        to connect to.
+                      properties:
+                        asn:
+                          description: ASN is the AS number to use for the local end
+                            of the session.
+                          format: int32
+                          maximum: 4294967295
+                          minimum: 0
+                          type: integer
+                        id:
+                          description: ID is the BGP router ID
+                          type: string
+                        neighbors:
+                          description: Neighbors is the list of neighbors we want
+                            to establish BGP sessions with.
+                          items:
+                            description: Neighbor represents a BGP Neighbor we want
+                              FRR to connect to.
+                            properties:
+                              address:
+                                description: Address is the IP address to establish
+                                  the session with.
+                                type: string
+                              asn:
+                                description: ASN is the AS number to use for the local
+                                  end of the session.
+                                format: int32
+                                maximum: 4294967295
+                                minimum: 0
+                                type: integer
+                              bfdProfile:
+                                description: BFDProfile is the name of the BFD Profile
+                                  to be used for the BFD session associated to the
+                                  BGP session. If not set, the BFD session won't be
+                                  set up.
+                                type: string
+                              ebgpMultiHop:
+                                description: EBGPMultiHop indicates if the BGPPeer
+                                  is multi-hops away.
+                                type: boolean
+                              holdTime:
+                                description: HoldTime is the requested BGP hold time,
+                                  per RFC4271. Defaults to 180s.
+                                type: string
+                              keepaliveTime:
+                                description: KeepaliveTime is the requested BGP keepalive
+                                  time, per RFC4271. Defaults to 60s.
+                                type: string
+                              password:
+                                description: Password to be used for establishing
+                                  the BGP session. Password and PasswordSecret are
+                                  mutually exclusive.
+                                type: string
+                              passwordSecret:
+                                description: PasswordSecret is name of the authentication
+                                  secret for the neighbor. the secret must be of type
+                                  "kubernetes.io/basic-auth", and created in the same
+                                  namespace as the frr-k8s daemon. The password is
+                                  stored in the secret as the key "password". Password
+                                  and PasswordSecret are mutually exclusive.
+                                properties:
+                                  name:
+                                    description: name is unique within a namespace
+                                      to reference a secret resource.
+                                    type: string
+                                  namespace:
+                                    description: namespace defines the space within
+                                      which the secret name must be unique.
+                                    type: string
+                                type: object
+                                x-kubernetes-map-type: atomic
+                              port:
+                                description: Port is the port to dial when establishing
+                                  the session. Defaults to 179.
+                                maximum: 16384
+                                minimum: 0
+                                type: integer
+                              toAdvertise:
+                                description: ToAdvertise represents the list of prefixes
+                                  to advertise to the given neighbor and the associated
+                                  properties.
+                                properties:
+                                  allowed:
+                                    description: Allowed is is the list of prefixes
+                                      allowed to be propagated to this neighbor. They
+                                      must match the prefixes defined in the router.
+                                    properties:
+                                      mode:
+                                        default: filtered
+                                        description: Mode is the mode to use when
+                                          handling the prefixes. When set to "filtered",
+                                          only the prefixes in the given list will
+                                          be allowed. When set to "all", all the prefixes
+                                          configured on the router will be allowed.
+                                        enum:
+                                        - all
+                                        - filtered
+                                        type: string
+                                      prefixes:
+                                        items:
+                                          type: string
+                                        type: array
+                                    type: object
+                                  withCommunity:
+                                    description: PrefixesWithCommunity is a list of
+                                      prefixes that are associated to a bgp community
+                                      when being advertised. The prefixes associated
+                                      to a given local pref must be in the prefixes
+                                      allowed to be advertised.
+                                    items:
+                                      description: CommunityPrefixes is a list of
+                                        prefixes associated to a community.
+                                      properties:
+                                        community:
+                                          description: Community is the community
+                                            associated to the prefixes.
+                                          type: string
+                                        prefixes:
+                                          description: Prefixes is the list of prefixes
+                                            associated to the community.
+                                          format: cidr
+                                          items:
+                                            type: string
+                                          minItems: 1
+                                          type: array
+                                      type: object
+                                    type: array
+                                  withLocalPref:
+                                    description: PrefixesWithLocalPref is a list of
+                                      prefixes that are associated to a local preference
+                                      when being advertised. The prefixes associated
+                                      to a given local pref must be in the prefixes
+                                      allowed to be advertised.
+                                    items:
+                                      description: LocalPrefPrefixes is a list of
+                                        prefixes associated to a local preference.
+                                      properties:
+                                        localPref:
+                                          description: LocalPref is the local preference
+                                            associated to the prefixes.
+                                          format: int32
+                                          type: integer
+                                        prefixes:
+                                          description: Prefixes is the list of prefixes
+                                            associated to the local preference.
+                                          format: cidr
+                                          items:
+                                            type: string
+                                          minItems: 1
+                                          type: array
+                                      type: object
+                                    type: array
+                                type: object
+                              toReceive:
+                                description: ToReceive represents the list of prefixes
+                                  to receive from the given neighbor.
+                                properties:
+                                  allowed:
+                                    description: Allowed is the list of prefixes allowed
+                                      to be received from this neighbor.
+                                    properties:
+                                      mode:
+                                        default: filtered
+                                        description: Mode is the mode to use when
+                                          handling the prefixes. When set to "filtered",
+                                          only the prefixes in the given list will
+                                          be allowed. When set to "all", all the prefixes
+                                          configured on the router will be allowed.
+                                        enum:
+                                        - all
+                                        - filtered
+                                        type: string
+                                      prefixes:
+                                        items:
+                                          description: PrefixSelector is a filter
+                                            of prefixes to receive.
+                                          properties:
+                                            ge:
+                                              description: The prefix length modifier.
+                                                This selector accepts any matching
+                                                prefix with length greater or equal
+                                                the given value.
+                                              format: int32
+                                              maximum: 128
+                                              minimum: 1
+                                              type: integer
+                                            le:
+                                              description: The prefix length modifier.
+                                                This selector accepts any matching
+                                                prefix with length less or equal the
+                                                given value.
+                                              format: int32
+                                              maximum: 128
+                                              minimum: 1
+                                              type: integer
+                                            prefix:
+                                              format: cidr
+                                              type: string
+                                          type: object
+                                        type: array
+                                    type: object
+                                type: object
+                            required:
+                            - address
+                            - asn
+                            type: object
+                          type: array
+                        prefixes:
+                          description: Prefixes is the list of prefixes we want to
+                            advertise from this router instance.
+                          items:
+                            type: string
+                          type: array
+                        vrf:
+                          description: VRF is the host vrf used to establish sessions
+                            from this router.
+                          type: string
+                      required:
+                      - asn
+                      type: object
+                    type: array
+                type: object
+              nodeSelector:
+                description: NodeSelector limits the nodes that will attempt to apply
+                  this config. When specified, the configuration will be considered
+                  only on nodes whose labels match the specified selectors. When it
+                  is not specified all nodes will attempt to apply this config.
+                properties:
+                  matchExpressions:
+                    description: matchExpressions is a list of label selector requirements.
+                      The requirements are ANDed.
+                    items:
+                      description: A label selector requirement is a selector that
+                        contains values, a key, and an operator that relates the key
+                        and values.
+                      properties:
+                        key:
+                          description: key is the label key that the selector applies
+                            to.
+                          type: string
+                        operator:
+                          description: operator represents a key's relationship to
+                            a set of values. Valid operators are In, NotIn, Exists
+                            and DoesNotExist.
+                          type: string
+                        values:
+                          description: values is an array of string values. If the
+                            operator is In or NotIn, the values array must be non-empty.
+                            If the operator is Exists or DoesNotExist, the values
+                            array must be empty. This array is replaced during a strategic
+                            merge patch.
+                          items:
+                            type: string
+                          type: array
+                      required:
+                      - key
+                      - operator
+                      type: object
+                    type: array
+                  matchLabels:
+                    additionalProperties:
+                      type: string
+                    description: matchLabels is a map of {key,value} pairs. A single
+                      {key,value} in the matchLabels map is equivalent to an element
+                      of matchExpressions, whose key field is "key", the operator
+                      is "In", and the values array contains only "value". The requirements
+                      are ANDed.
+                    type: object
+                type: object
+                x-kubernetes-map-type: atomic
+              raw:
+                description: Raw is a snippet of raw frr configuration that gets appended
+                  to the one rendered translating the type safe API.
+                properties:
+                  priority:
+                    description: Priority is the order with this configuration is
+                      appended to the bottom of the rendered configuration. A higher
+                      value means the raw config is appended later in the configuration
+                      file.
+                    type: integer
+                  rawConfig:
+                    description: Config is a raw FRR configuration to be appended
+                      to the configuration rendered via the k8s api.
+                    type: string
+                type: object
+            type: object
+          status:
+            description: FRRConfigurationStatus defines the observed state of FRRConfiguration.
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.11.3
+  creationTimestamp: null
+  name: frrnodestates.frrk8s.metallb.io
+spec:
+  group: frrk8s.metallb.io
+  names:
+    kind: FRRNodeState
+    listKind: FRRNodeStateList
+    plural: frrnodestates
+    singular: frrnodestate
+  scope: Cluster
+  versions:
+  - name: v1beta1
+    schema:
+      openAPIV3Schema:
+        description: FRRNodeState exposes the status of the FRR instance running on
+          each node.
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: FRRNodeStateSpec defines the desired state of FRRNodeState.
+            type: object
+          status:
+            description: FRRNodeStateStatus defines the observed state of FRRNodeState.
+            properties:
+              lastConversionResult:
+                description: LastConversionResult is the status of the last translation
+                  between the `FRRConfiguration`s resources and FRR's configuration,
+                  contains "success" or an error.
+                type: string
+              lastReloadResult:
+                description: LastReloadResult represents the status of the last configuration
+                  update operation by FRR, contains "success" or an error.
+                type: string
+              runningConfig:
+                description: RunningConfig represents the current FRR running config,
+                  which is the configuration the FRR instance is currently running
+                  with.
+                type: string
             type: object
         type: object
     served: true
@@ -3606,7 +3874,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: webhook-service
+  name: metallb-webhook-service
   namespace: metallb-system
 spec:
   ports:
@@ -3803,7 +4071,7 @@ webhooks:
   - v1
   clientConfig:
     service:
-      name: webhook-service
+      name: metallb-webhook-service
       namespace: metallb-system
       path: /validate-metallb-io-v1beta2-bgppeer
   failurePolicy: Fail
@@ -3823,27 +4091,7 @@ webhooks:
   - v1
   clientConfig:
     service:
-      name: webhook-service
-      namespace: metallb-system
-      path: /validate-metallb-io-v1beta1-addresspool
-  failurePolicy: Fail
-  name: addresspoolvalidationwebhook.metallb.io
-  rules:
-  - apiGroups:
-    - metallb.io
-    apiVersions:
-    - v1beta1
-    operations:
-    - CREATE
-    - UPDATE
-    resources:
-    - addresspools
-  sideEffects: None
-- admissionReviewVersions:
-  - v1
-  clientConfig:
-    service:
-      name: webhook-service
+      name: metallb-webhook-service
       namespace: metallb-system
       path: /validate-metallb-io-v1beta1-bfdprofile
   failurePolicy: Fail
@@ -3863,7 +4111,7 @@ webhooks:
   - v1
   clientConfig:
     service:
-      name: webhook-service
+      name: metallb-webhook-service
       namespace: metallb-system
       path: /validate-metallb-io-v1beta1-bgpadvertisement
   failurePolicy: Fail
@@ -3883,7 +4131,7 @@ webhooks:
   - v1
   clientConfig:
     service:
-      name: webhook-service
+      name: metallb-webhook-service
       namespace: metallb-system
       path: /validate-metallb-io-v1beta1-community
   failurePolicy: Fail
@@ -3903,7 +4151,7 @@ webhooks:
   - v1
   clientConfig:
     service:
-      name: webhook-service
+      name: metallb-webhook-service
       namespace: metallb-system
       path: /validate-metallb-io-v1beta1-ipaddresspool
   failurePolicy: Fail
@@ -3923,7 +4171,7 @@ webhooks:
   - v1
   clientConfig:
     service:
-      name: webhook-service
+      name: metallb-webhook-service
       namespace: metallb-system
       path: /validate-metallb-io-v1beta1-l2advertisement
   failurePolicy: Fail
@@ -3946,6 +4194,19 @@ metadata:
   labels:
     app: metallb
   name: controller
+  namespace: metallb-system
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app.kubernetes.io/component: rbac
+    app.kubernetes.io/created-by: frr-k8s
+    app.kubernetes.io/instance: frr-k8s-sa
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: serviceaccount
+    app.kubernetes.io/part-of: frr-k8s
+  name: frr-k8s-daemon
   namespace: metallb-system
 ---
 apiVersion: v1
@@ -4002,14 +4263,6 @@ rules:
 - apiGroups:
   - metallb.io
   resources:
-  - addresspools
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - metallb.io
-  resources:
   - bfdprofiles
   verbs:
   - get
@@ -4052,10 +4305,53 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   labels:
+    app: frr-k8s
+  name: frr-k8s-daemon-role
+  namespace: metallb-system
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - secrets
+  verbs:
+  - get
+  - list
+  - watch
+  - update
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: frr-k8s-daemon-scc
+  namespace: metallb-system
+rules:
+- apiGroups:
+  - security.openshift.io
+  resourceNames:
+  - privileged
+  resources:
+  - securitycontextconstraints
+  verbs:
+  - use
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  labels:
     app: metallb
   name: pod-lister
   namespace: metallb-system
 rules:
+- apiGroups:
+  - frrk8s.metallb.io
+  resources:
+  - frrconfigurations
+  verbs:
+  - get
+  - list
+  - watch
+  - create
+  - update
 - apiGroups:
   - ""
   resources:
@@ -4074,14 +4370,6 @@ rules:
   - ""
   resources:
   - configmaps
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - metallb.io
-  resources:
-  - addresspools
   verbs:
   - get
   - list
@@ -4174,6 +4462,125 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
+  creationTimestamp: null
+  name: frr-k8s-daemon-role
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - nodes
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - admissionregistration.k8s.io
+  resources:
+  - validatingwebhookconfigurations
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - admissionregistration.k8s.io
+  resourceNames:
+  - frr-k8s-validating-webhook-configuration
+  resources:
+  - validatingwebhookconfigurations
+  verbs:
+  - update
+- apiGroups:
+  - frrk8s.metallb.io
+  resources:
+  - frrconfigurations
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - frrk8s.metallb.io
+  resources:
+  - frrconfigurations/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - frrk8s.metallb.io
+  resources:
+  - frrconfigurations/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - frrk8s.metallb.io
+  resources:
+  - frrnodestates
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - frrk8s.metallb.io
+  resources:
+  - frrnodestates/status
+  verbs:
+  - get
+  - patch
+  - update
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/component: kube-rbac-proxy
+    app.kubernetes.io/created-by: frr-k8s
+    app.kubernetes.io/instance: metrics-reader
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: clusterrole
+    app.kubernetes.io/part-of: frr-k8s
+  name: frr-k8s-metrics-reader
+rules:
+- nonResourceURLs:
+  - /metrics
+  verbs:
+  - get
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/component: kube-rbac-proxy
+    app.kubernetes.io/created-by: frr-k8s
+    app.kubernetes.io/instance: proxy-role
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: clusterrole
+    app.kubernetes.io/part-of: frr-k8s
+  name: frr-k8s-proxy-role
+rules:
+- apiGroups:
+  - authentication.k8s.io
+  resources:
+  - tokenreviews
+  verbs:
+  - create
+- apiGroups:
+  - authorization.k8s.io
+  resources:
+  - subjectaccessreviews
+  verbs:
+  - create
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
   labels:
     app: metallb
   name: metallb-system:controller
@@ -4240,7 +4647,6 @@ rules:
 - apiGroups:
   - apiextensions.k8s.io
   resourceNames:
-  - addresspools.metallb.io
   - bfdprofiles.metallb.io
   - bgpadvertisements.metallb.io
   - bgppeers.metallb.io
@@ -4327,6 +4733,41 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   labels:
+    app.kubernetes.io/component: rbac
+    app.kubernetes.io/created-by: frr-k8s
+    app.kubernetes.io/instance: frr-k8s-rolebinding
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: rolebinding
+    app.kubernetes.io/part-of: frr-k8s
+  name: frr-k8s-daemon-rolebinding
+  namespace: metallb-system
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: frr-k8s-daemon-role
+subjects:
+- kind: ServiceAccount
+  name: frr-k8s-daemon
+  namespace: metallb-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: frr-k8s-daemon-scc-binding
+  namespace: metallb-system
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: frr-k8s-daemon-scc
+subjects:
+- kind: ServiceAccount
+  name: frr-k8s-daemon
+  namespace: metallb-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  labels:
     app: metallb
   name: pod-lister
   namespace: metallb-system
@@ -4370,6 +4811,46 @@ subjects:
   namespace: metallb-system
 - kind: ServiceAccount
   name: speaker
+  namespace: metallb-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  labels:
+    app.kubernetes.io/component: rbac
+    app.kubernetes.io/created-by: frr-k8s
+    app.kubernetes.io/instance: frr-k8s-rolebinding
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: clusterrolebinding
+    app.kubernetes.io/part-of: frr-k8s
+  name: frr-k8s-daemon-rolebinding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: frr-k8s-daemon-role
+subjects:
+- kind: ServiceAccount
+  name: frr-k8s-daemon
+  namespace: metallb-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  labels:
+    app.kubernetes.io/component: kube-rbac-proxy
+    app.kubernetes.io/created-by: frr-k8s
+    app.kubernetes.io/instance: proxy-rolebinding
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: clusterrolebinding
+    app.kubernetes.io/part-of: frr-k8s
+  name: frr-k8s-proxy-rolebinding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: frr-k8s-proxy-role
+subjects:
+- kind: ServiceAccount
+  name: frr-k8s-daemon
   namespace: metallb-system
 ---
 apiVersion: rbac.authorization.k8s.io/v1
