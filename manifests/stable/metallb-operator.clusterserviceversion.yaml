@@ -296,30 +296,39 @@ spec:
     - kind: BFDProfile
       name: bfdprofiles.metallb.io
       version: v1beta1
+      description: BFDProfile is the Schema for the bfdprofiles API
     - kind: BGPAdvertisement
       name: bgpadvertisements.metallb.io
       version: v1beta1
+      description: BGPAdvertisement is the Schema for the bgpadvertisements API
     - kind: BGPPeer
       name: bgppeers.metallb.io
       version: v1beta1
+      description: BGPPeer is the Schema for the bgppeers API
     - kind: BGPPeer
       name: bgppeers.metallb.io
       version: v1beta2
+      description: BGPPeer is the Schema for the bgppeers API
     - kind: Community
       name: communities.metallb.io
       version: v1beta1
+      description: Community is the Schema for the communities API
     - kind: FRRConfiguration
       name: frrconfigurations.frrk8s.metallb.io
       version: v1beta1
+      description: FRRConfiguration is the Schema for the frrconfigurations API
     - kind: FRRNodeState
       name: frrnodestates.frrk8s.metallb.io
       version: v1beta1
+      description: FRRNodeState is the Schema for the frrnodestates API
     - kind: IPAddressPool
       name: ipaddresspools.metallb.io
       version: v1beta1
+      description: IPAddressPool is the Schema for the ipaddresspools API
     - kind: L2Advertisement
       name: l2advertisements.metallb.io
       version: v1beta1
+      description: L2Advertisement is the Schema for the l2advertisements API
     - description: MetalLB is the Schema for the metallbs API
       displayName: MetalLB
       kind: MetalLB
