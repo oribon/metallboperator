@@ -274,7 +274,7 @@ metadata:
     categories: Networking
     certified: "false"
     containerImage: quay.io/metallb/metallb-operator
-    createdAt: "2024-02-11T07:26:11Z"
+    createdAt: "2024-02-16T16:37:35Z"
     description: An operator for deploying MetalLB on a kubernetes cluster.
     operators.operatorframework.io/builder: operator-sdk-v1.26.1
     operators.operatorframework.io/project_layout: go.kubebuilder.io/v2
@@ -807,7 +807,7 @@ spec:
                   - name: cert
                     secret:
                       defaultMode: 420
-                      secretName: webhook-server-cert
+                      secretName: metallb-webhook-cert
       permissions:
         - rules:
             - apiGroups:

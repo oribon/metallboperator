@@ -281,13 +281,6 @@ jobs:
           path: metallb
           ref: "${{ steps.metallb_ref.outputs.content }}"
 
-      - name: Checkout MetalLB v0.12
-        uses: actions/checkout@v4
-        with:
-          repository: metallb/metallb
-          path: metallb-0.12
-          ref: v0.12
-
       - name: Install Dependencies
         run: |
           sudo apt-get update
@@ -423,6 +416,8 @@ jobs:
         run: |
           export KUBECONFIG=${HOME}/.kube/config
           kubectl apply -f config/samples/metallb.yaml
+          sleep 20
+          kubectl wait -n metallb-system --for=condition=Ready pod -l "component in (speaker,controller,frr-k8s,frr-k8s-webhook-server)" --timeout=180s
 
       - name: frr-k8s E2E Webhooks tests
         run: |
