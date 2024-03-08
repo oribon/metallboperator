@@ -706,8 +706,6 @@ spec:
                   value: quay.io/openshift/origin-metallb:4.16
                 - name: ENABLE_OPERATOR_WEBHOOK
                   value: "true"
-                - name: METALLB_BGP_TYPE
-                  value: frr
                 - name: FRR_IMAGE
                   value: quay.io/openshift/origin-metallb-frr:4.16
                 - name: KUBE_RBAC_PROXY_IMAGE
