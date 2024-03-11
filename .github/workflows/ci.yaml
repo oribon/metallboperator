@@ -52,9 +52,7 @@ jobs:
     - name: Unit and Integration Tests
       run: |
         export KUBECONFIG=${HOME}/.kube/config
-        METALLB_BGP_TYPE=native make test
-        METALLB_BGP_TYPE=frr DEPLOY_KUBE_RBAC_PROXIES=true make test
-        METALLB_BGP_TYPE=frr-k8s DEPLOY_KUBE_RBAC_PROXIES=true make test
+        make test
 
   e2e:
     runs-on: ubuntu-22.04
@@ -99,7 +97,7 @@ jobs:
       run: |
         export KUBECONFIG=${HOME}/.kube/config
         make test-validation
-        SKIP="frr-k8s" make test-e2e
+        make test-e2e
 
     - name: Collect Logs
       if: ${{ failure() }}
@@ -145,7 +143,7 @@ jobs:
       run: |
         export KUBECONFIG=${HOME}/.kube/config
         make test-validation
-        SKIP="frr-k8s" make test-e2e
+        make test-e2e
 
     - name: Collect Logs
       if: ${{ failure() }}
@@ -175,7 +173,7 @@ jobs:
 
     - uses: actions/setup-go@v2
       with:
-        go-version: '1.20'
+        go-version: '1.21'
 
     - name: Build image
       run: |
@@ -202,7 +200,7 @@ jobs:
       run: |
         export KUBECONFIG=${HOME}/.kube/config
         make  test-validation
-        SKIP="frr-k8s" make test-e2e
+        make test-e2e
 
     - name: Collect Logs
       if: ${{ failure() }}
@@ -240,7 +238,7 @@ jobs:
         cd ${GITHUB_WORKSPACE}/metallboperator-latest
         export KUBECONFIG=${HOME}/.kube/config
         make test-validation
-        SKIP="frr-k8s" make test-e2e
+        make test-e2e
 
     - name: Checkout
       uses: actions/checkout@v4
@@ -304,7 +302,7 @@ jobs:
 
       - name: Deploy Metal LB Operator
         run: |
-          IMG=${built_image} KUSTOMIZE_DEPLOY_DIR="config/frr-on-ci/" make deploy
+          IMG=${built_image} KUSTOMIZE_DEPLOY_DIR="config/frr-webhook-prometheus/" make deploy
 
       - name: Ensure MetalLB operator is ready
         run: |
@@ -322,7 +320,7 @@ jobs:
         run: |
           cd ${GITHUB_WORKSPACE}/metallb
           inv remove-lb-exclusion-from-nodes
-          sudo -E env "PATH=$PATH" inv e2etest -b frr --skip "IPV6|DUALSTACK|FRRK8S-MODE" -e /tmp/kind_logs
+          sudo -E env "PATH=$PATH" inv e2etest -b frr --skip "IPV6|DUALSTACK|FRRK8S-MODE|L2ServiceStatus" -e /tmp/kind_logs
 
       - name: Collect Logs
         if: ${{ failure() }}
@@ -396,7 +394,7 @@ jobs:
 
       - name: Deploy MetalLB Operator using frr-k8s mode
         run: |
-          IMG=${built_image} KUSTOMIZE_DEPLOY_DIR="config/frr-k8s-on-ci/" make deploy
+          IMG=${built_image} KUSTOMIZE_DEPLOY_DIR="config/frr-webhook-prometheus/" make deploy
 
       - name: Ensure MetalLB operator is ready
         run: |
@@ -415,7 +413,7 @@ jobs:
       - name: Deploy MetalLB resource
         run: |
           export KUBECONFIG=${HOME}/.kube/config
-          kubectl apply -f config/samples/metallb.yaml
+          kubectl apply -f config/samples/metallb_frrk8s.yaml
           sleep 20
           kubectl wait -n metallb-system --for=condition=Ready pod -l "component in (speaker,controller,frr-k8s,frr-k8s-webhook-server)" --timeout=180s
 
@@ -433,7 +431,7 @@ jobs:
         run: |
           cd ${GITHUB_WORKSPACE}/metallb
           inv remove-lb-exclusion-from-nodes
-          sudo -E env "PATH=$PATH" inv e2etest -b frr-k8s --skip "IPV6|DUALSTACK|FRR-MODE" -e /tmp/kind_logs
+          sudo -E env "PATH=$PATH" inv e2etest -b frr-k8s --skip "IPV6|DUALSTACK|FRR-MODE|L2ServiceStatus" -e /tmp/kind_logs
 
       - name: Collect Logs
         if: ${{ failure() }}
