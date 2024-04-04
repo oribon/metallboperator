@@ -4,22 +4,25 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.14.0
   creationTimestamp: null
-  name: communities.metallb.io
+  name: servicel2statuses.metallb.io
 spec:
   group: metallb.io
   names:
-    kind: Community
-    listKind: CommunityList
-    plural: communities
-    singular: community
+    kind: ServiceL2Status
+    listKind: ServiceL2StatusList
+    plural: servicel2statuses
+    singular: servicel2status
   scope: Namespaced
   versions:
-  - name: v1beta1
+  - additionalPrinterColumns:
+    - jsonPath: .status.node
+      name: Allocated Node
+      type: string
+    name: v1beta1
     schema:
       openAPIV3Schema:
-        description: |-
-          Community is a collection of aliases for communities.
-          Users can define named aliases to be used in the BGPPeer CRD.
+        description: ServiceL2Status reveals the actual traffic status of loadbalancer
+          services in layer2 mode.
         properties:
           apiVersion:
             description: |-
@@ -39,24 +42,25 @@ spec:
           metadata:
             type: object
           spec:
-            description: CommunitySpec defines the desired state of Community.
+            description: ServiceL2StatusSpec defines the desired state of ServiceL2Status.
+            type: object
+          status:
+            description: MetalLBServiceL2Status defines the observed state of ServiceL2Status.
             properties:
-              communities:
+              interfaces:
+                description: Interfaces indicates the interfaces that receive the
+                  directed traffic
                 items:
+                  description: InterfaceInfo defines interface info of layer2 announcement.
                   properties:
                     name:
-                      description: The name of the alias for the community.
-                      type: string
-                    value:
-                      description: |-
-                        The BGP community value corresponding to the given name. Can be a standard community of the form 1234:1234
-                        or a large community of the form large:1234:1234:1234.
+                      description: Name the name of network interface card
                       type: string
                   type: object
                 type: array
-            type: object
-          status:
-            description: CommunityStatus defines the observed state of Community.
+              node:
+                description: Node indicates the node that receives the directed traffic
+                type: string
             type: object
         type: object
     served: true
