@@ -18,6 +18,9 @@ package v1beta1
 
 import (
 	"errors"
+	"fmt"
+	"net"
+	"strings"
 
 	"github.com/metallb/metallb-operator/pkg/params"
 	v1 "k8s.io/api/core/v1"
@@ -39,7 +42,7 @@ var _ webhook.Validator = &MetalLB{}
 
 // ValidateCreate implements webhook.Validator so a webhook will be registered for MetalLB.
 func (metallb *MetalLB) ValidateCreate() (admission.Warnings, error) {
-	if err := metallb.validate(); err != nil {
+	if err := metallb.Validate(); err != nil {
 		return admission.Warnings{}, err
 	}
 
@@ -48,7 +51,7 @@ func (metallb *MetalLB) ValidateCreate() (admission.Warnings, error) {
 
 // ValidateUpdate implements webhook.Validator so a webhook will be registered for MetalLB.
 func (metallb *MetalLB) ValidateUpdate(old runtime.Object) (admission.Warnings, error) {
-	if err := metallb.validate(); err != nil {
+	if err := metallb.Validate(); err != nil {
 		return admission.Warnings{}, err
 	}
 
@@ -60,7 +63,7 @@ func (metallb *MetalLB) ValidateDelete() (admission.Warnings, error) {
 	return admission.Warnings{}, nil
 }
 
-func (metallb *MetalLB) validate() error {
+func (metallb *MetalLB) Validate() error {
 	for _, ct := range metallb.Spec.ControllerTolerations {
 		if ct.TolerationSeconds != nil && *ct.TolerationSeconds > 0 && ct.Effect != v1.TaintEffectNoExecute {
 			return errors.New("ControllerToleration effect must be NoExecute when tolerationSeconds is set")
@@ -109,6 +112,28 @@ func (metallb *MetalLB) validate() error {
 		metallb.Spec.BGPBackend != params.FRRK8sMode &&
 		metallb.Spec.BGPBackend != params.FRRMode {
 		return errors.New("Invalid BGP Backend, must be one of native, frr, frr-k8s")
+	}
+
+	if metallb.Spec.BGPBackend != params.FRRK8sMode &&
+		metallb.Spec.FRRK8SConfig != nil {
+		return fmt.Errorf("can't apply frrk8s config while running in %s mode", metallb.Spec.BGPBackend)
+	}
+
+	if err := validateFRRK8sConfig(metallb.Spec.FRRK8SConfig); err != nil {
+		return err
+	}
+	return nil
+}
+
+func validateFRRK8sConfig(config *FRRK8SConfig) error {
+	if config == nil {
+		return nil
+	}
+	for _, cidr := range config.AlwaysBlock {
+		_, _, err := net.ParseCIDR(strings.TrimSpace(cidr))
+		if err != nil {
+			return fmt.Errorf("invalid CIDR %s in AlwaysBlock", cidr)
+		}
 	}
 	return nil
 }

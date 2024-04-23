@@ -7,6 +7,7 @@ import (
 	"github.com/metallb/metallb-operator/pkg/params"
 	. "github.com/onsi/gomega"
 	appsv1 "k8s.io/api/apps/v1"
+	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 )
@@ -33,13 +34,26 @@ func TestParseFRRK8SChartWithCustomValues(t *testing.T) {
 	g := NewGomegaWithT(t)
 	chart, err := NewFRRK8SChart(frrk8sHelmChartPath, frrk8sHelmChartName, MetalLBTestNameSpace)
 	g.Expect(err).To(BeNil())
+	nodeSelector := map[string]string{
+		"foo":              "bar",
+		"kubernetes.io/os": "linux",
+	}
+	tolerations := []corev1.Toleration{{Key: "foo", Operator: corev1.TolerationOpExists}}
+
 	metallb := &metallbv1beta1.MetalLB{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      "metallb",
 			Namespace: MetalLBTestNameSpace,
 		},
 		Spec: metallbv1beta1.MetalLBSpec{
-			LogLevel: metallbv1beta1.LogLevelDebug,
+			LogLevel:            metallbv1beta1.LogLevelDebug,
+			SpeakerNodeSelector: nodeSelector,
+			SpeakerTolerations:  tolerations,
+			FRRK8SConfig: &metallbv1beta1.FRRK8SConfig{
+				AlwaysBlock: []string{"192.168.1.0/24",
+					"2001:db8::/32",
+				},
+			},
 		},
 	}
 
@@ -60,16 +74,22 @@ func TestParseFRRK8SChartWithCustomValues(t *testing.T) {
 					g.Expect(container.Image == "frr-k8s:test")
 					frrk8sControllerFound = true
 
-					logLevelChanged := false
+					logLevelChanged, alwaysBlockChanged := false, false
 					for _, a := range container.Args {
 						if a == "--log-level=debug" {
 							logLevelChanged = true
 						}
+						if a == "--always-block=192.168.1.0/24,2001:db8::/32" {
+							alwaysBlockChanged = true
+						}
 					}
 					g.Expect(logLevelChanged).To(BeTrue())
+					g.Expect(alwaysBlockChanged).To(BeTrue())
 				}
 			}
 			g.Expect(frrk8sControllerFound).To(BeTrue())
+			g.Expect(frrk8s.Spec.Template.Spec.NodeSelector).To(Equal(nodeSelector))
+			g.Expect(frrk8s.Spec.Template.Spec.Tolerations).To(ContainElement(tolerations[0]))
 			isFRRK8SFound = true
 		}
 		if objKind == "Deployment" && objName == frrk8sWebhookDeploymentName {
