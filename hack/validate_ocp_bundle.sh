@@ -1,6 +1,5 @@
 #!/bin/bash
 
-export OPERATOR_SDK_VERSION=v1.22.2
 make operator-sdk
 
 mkdir -p _cache/bundle/manifests
