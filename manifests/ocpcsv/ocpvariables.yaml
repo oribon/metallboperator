@@ -20,7 +20,7 @@ spec:
           - name: FRR_IMAGE
             value: quay.io/openshift/origin-metallb-frr:4.17
           - name: KUBE_RBAC_PROXY_IMAGE
-            value: quay.io/openshift/origin-kube-rbac-proxy:4.17
+            value: quay.io/openshift/origin-kube-rbac-proxy:4.16
           - name: DEPLOY_KUBE_RBAC_PROXIES
             value: "true"
           - name: DEPLOY_PODMONITORS
