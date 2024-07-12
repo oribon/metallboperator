@@ -458,47 +458,51 @@ spec:
   apiservicedefinitions: {}
   customresourcedefinitions:
     owned:
-    - kind: BFDProfile
-      name: bfdprofiles.metallb.io
-      version: v1beta1
-      description: BFDProfile is the Schema for the bfdprofiles API
-    - kind: BGPAdvertisement
-      name: bgpadvertisements.metallb.io
-      version: v1beta1
-      description: BGPAdvertisement is the Schema for the bgpadvertisements API
-    - kind: BGPPeer
-      name: bgppeers.metallb.io
-      version: v1beta1
-      description: BGPPeer is the Schema for the bgppeers API
-    - kind: BGPPeer
-      name: bgppeers.metallb.io
-      version: v1beta2
-      description: BGPPeer is the Schema for the bgppeers API
-    - kind: Community
-      name: communities.metallb.io
-      version: v1beta1
-      description: Community is the Schema for the communities API
-    - kind: FRRConfiguration
-      name: frrconfigurations.frrk8s.metallb.io
-      version: v1beta1
-      description: FRRConfiguration is the Schema for the frrconfigurations API
-    - kind: FRRNodeState
-      name: frrnodestates.frrk8s.metallb.io
-      version: v1beta1
-      description: FRRNodeState is the Schema for the frrnodestates API
-    - kind: IPAddressPool
-      name: ipaddresspools.metallb.io
-      version: v1beta1
-      description: IPAddressPool is the Schema for the ipaddresspools API
-    - kind: L2Advertisement
-      name: l2advertisements.metallb.io
-      version: v1beta1
-      description: L2Advertisement is the Schema for the l2advertisements API
-    - description: MetalLB is the Schema for the metallbs API
-      displayName: MetalLB
-      kind: MetalLB
-      name: metallbs.metallb.io
-      version: v1beta1
+      - kind: BFDProfile
+        name: bfdprofiles.metallb.io
+        version: v1beta1
+        description: BFDProfile is the Schema for the bfdprofiles API
+      - kind: BGPAdvertisement
+        name: bgpadvertisements.metallb.io
+        version: v1beta1
+        description: BGPAdvertisement is the Schema for the bgpadvertisements API
+      - kind: BGPPeer
+        name: bgppeers.metallb.io
+        version: v1beta1
+        description: BGPPeer is the Schema for the bgppeers API
+      - kind: BGPPeer
+        name: bgppeers.metallb.io
+        version: v1beta2
+        description: BGPPeer is the Schema for the bgppeers API
+      - kind: Community
+        name: communities.metallb.io
+        version: v1beta1
+        description: Community is the Schema for the communities API
+      - kind: FRRConfiguration
+        name: frrconfigurations.frrk8s.metallb.io
+        version: v1beta1
+        description: FRRConfiguration is the Schema for the frrconfigurations API
+      - kind: FRRNodeState
+        name: frrnodestates.frrk8s.metallb.io
+        version: v1beta1
+        description: FRRNodeState is the Schema for the frrnodestates API
+      - kind: IPAddressPool
+        name: ipaddresspools.metallb.io
+        version: v1beta1
+        description: IPAddressPool is the Schema for the ipaddresspools API
+      - kind: L2Advertisement
+        name: l2advertisements.metallb.io
+        version: v1beta1
+        description: L2Advertisement is the Schema for the l2advertisements API
+      - description: MetalLB is the Schema for the metallbs API
+        displayName: MetalLB
+        kind: MetalLB
+        name: metallbs.metallb.io
+        version: v1beta1
+      - kind: ServiceL2Status
+        description: L2ServiceStatus is the Schema for the l2servicestatus API
+        name: servicel2statuses.metallb.io
+        version: v1beta1
   description: An operator for deploying MetalLB on a kubernetes cluster.
   displayName: MetalLB Operator
   icon:
@@ -507,914 +511,922 @@ spec:
   install:
     spec:
       clusterPermissions:
-      - rules:
-        - apiGroups:
-          - authentication.k8s.io
-          resources:
-          - tokenreviews
-          verbs:
-          - create
-        - apiGroups:
-          - authorization.k8s.io
-          resources:
-          - subjectaccessreviews
-          verbs:
-          - create
-        - apiGroups:
-          - ""
-          resources:
-          - services
-          - namespaces
-          verbs:
-          - get
-          - list
-          - watch
-        - apiGroups:
-          - ""
-          resources:
-          - nodes
-          verbs:
-          - list
-        - apiGroups:
-          - ""
-          resources:
-          - services/status
-          verbs:
-          - update
-        - apiGroups:
-          - ""
-          resources:
-          - events
-          verbs:
-          - create
-          - patch
-        - apiGroups:
-          - policy
-          resourceNames:
-          - controller
-          resources:
-          - podsecuritypolicies
-          verbs:
-          - use
-        - apiGroups:
-          - admissionregistration.k8s.io
-          resourceNames:
-          - metallb-webhook-configuration
-          resources:
-          - validatingwebhookconfigurations
-          - mutatingwebhookconfigurations
-          verbs:
-          - create
-          - delete
-          - get
-          - list
-          - patch
-          - update
-          - watch
-        - apiGroups:
-          - admissionregistration.k8s.io
-          resources:
-          - validatingwebhookconfigurations
-          - mutatingwebhookconfigurations
-          verbs:
-          - list
-          - watch
-        - apiGroups:
-          - apiextensions.k8s.io
-          resourceNames:
-          - bfdprofiles.metallb.io
-          - bgpadvertisements.metallb.io
-          - bgppeers.metallb.io
-          - ipaddresspools.metallb.io
-          - l2advertisements.metallb.io
-          - communities.metallb.io
-          resources:
-          - customresourcedefinitions
-          verbs:
-          - create
-          - delete
-          - get
-          - list
-          - patch
-          - update
-          - watch
-        - apiGroups:
-          - apiextensions.k8s.io
-          resources:
-          - customresourcedefinitions
-          verbs:
-          - list
-          - watch
-        serviceAccountName: controller
-      - rules:
-        - apiGroups:
-            - ""
-          resources:
-            - nodes
-          verbs:
-            - get
-            - list
-            - watch
-        - apiGroups:
-            - admissionregistration.k8s.io
-          resources:
-            - validatingwebhookconfigurations
-          verbs:
-            - get
-            - list
-            - watch
-        - apiGroups:
-            - admissionregistration.k8s.io
-          resourceNames:
-            - frr-k8s-validating-webhook-configuration
-          resources:
-            - validatingwebhookconfigurations
-          verbs:
-            - update
-        - apiGroups:
-            - frrk8s.metallb.io
-          resources:
-            - frrconfigurations
-          verbs:
-            - create
-            - delete
-            - get
-            - list
-            - patch
-            - update
-            - watch
-        - apiGroups:
-            - frrk8s.metallb.io
-          resources:
-            - frrconfigurations/finalizers
-          verbs:
-            - update
-        - apiGroups:
-            - frrk8s.metallb.io
-          resources:
-            - frrconfigurations/status
-          verbs:
-            - get
-            - patch
-            - update
-        - apiGroups:
-            - frrk8s.metallb.io
-          resources:
-            - frrnodestates
-          verbs:
-            - create
-            - delete
-            - get
-            - list
-            - patch
-            - update
-            - watch
-        - apiGroups:
-            - frrk8s.metallb.io
-          resources:
-            - frrnodestates/status
-          verbs:
-            - get
-            - patch
-            - update
-        - apiGroups:
-            - authentication.k8s.io
-          resources:
-            - tokenreviews
-          verbs:
-            - create
-        - apiGroups:
-            - authorization.k8s.io
-          resources:
-            - subjectaccessreviews
-          verbs:
-            - create
-        serviceAccountName: frr-k8s-daemon
-      - rules:
-        - apiGroups:
-          - ""
-          resources:
-          - secrets
-          verbs:
-          - create
-          - delete
-          - get
-          - list
-          - patch
-          - update
-          - watch
-        - apiGroups:
-          - admissionregistration.k8s.io
-          resources:
-          - validatingwebhookconfigurations
-          verbs:
-          - create
-          - delete
-          - get
-          - list
-          - patch
-          - update
-          - watch
-        - apiGroups:
-          - apiextensions.k8s.io
-          resources:
-          - customresourcedefinitions
-          verbs:
-          - get
-          - list
-          - watch
-        - apiGroups:
-          - metallb.io
-          resources:
-          - metallbs
-          verbs:
-          - create
-          - delete
-          - get
-          - list
-          - patch
-          - update
-          - watch
-        - apiGroups:
-          - metallb.io
-          resources:
-          - metallbs/finalizers
-          verbs:
-          - delete
-          - get
-          - patch
-          - update
-        - apiGroups:
-          - metallb.io
-          resources:
-          - metallbs/status
-          verbs:
-          - get
-          - patch
-          - update
-        - apiGroups:
-          - monitoring.coreos.com
-          resources:
-          - podmonitors
-          verbs:
-          - create
-          - delete
-          - get
-          - list
-          - patch
-          - update
-          - watch
-        - apiGroups:
-          - monitoring.coreos.com
-          resources:
-          - servicemonitors
-          verbs:
-          - create
-          - delete
-          - get
-          - list
-          - patch
-          - update
-          - watch
-        - apiGroups:
-          - policy
-          resources:
-          - podsecuritypolicies
-          verbs:
-          - create
-          - delete
-          - get
-          - list
-          - patch
-          - update
-          - watch
-        serviceAccountName: manager-account
-      - rules:
-        - apiGroups:
-          - authentication.k8s.io
-          resources:
-          - tokenreviews
-          verbs:
-          - create
-        - apiGroups:
-          - authorization.k8s.io
-          resources:
-          - subjectaccessreviews
-          verbs:
-          - create
-        - apiGroups:
-          - ""
-          resources:
-          - services
-          - endpoints
-          - nodes
-          - namespaces
-          verbs:
-          - get
-          - list
-          - watch
-        - apiGroups:
-          - discovery.k8s.io
-          resources:
-          - endpointslices
-          verbs:
-          - get
-          - list
-          - watch
-        - apiGroups:
-          - ""
-          resources:
-          - events
-          verbs:
-          - create
-          - patch
-        - apiGroups:
-          - policy
-          resourceNames:
-          - speaker
-          resources:
-          - podsecuritypolicies
-          verbs:
-          - use
-        serviceAccountName: speaker
+        - rules:
+            - apiGroups:
+                - authentication.k8s.io
+              resources:
+                - tokenreviews
+              verbs:
+                - create
+            - apiGroups:
+                - authorization.k8s.io
+              resources:
+                - subjectaccessreviews
+              verbs:
+                - create
+            - apiGroups:
+                - ""
+              resources:
+                - services
+                - namespaces
+              verbs:
+                - get
+                - list
+                - watch
+            - apiGroups:
+                - ""
+              resources:
+                - nodes
+              verbs:
+                - list
+            - apiGroups:
+                - ""
+              resources:
+                - services/status
+              verbs:
+                - update
+            - apiGroups:
+                - ""
+              resources:
+                - events
+              verbs:
+                - create
+                - patch
+            - apiGroups:
+                - policy
+              resourceNames:
+                - controller
+              resources:
+                - podsecuritypolicies
+              verbs:
+                - use
+            - apiGroups:
+                - admissionregistration.k8s.io
+              resourceNames:
+                - metallb-webhook-configuration
+              resources:
+                - validatingwebhookconfigurations
+                - mutatingwebhookconfigurations
+              verbs:
+                - create
+                - delete
+                - get
+                - list
+                - patch
+                - update
+                - watch
+            - apiGroups:
+                - admissionregistration.k8s.io
+              resources:
+                - validatingwebhookconfigurations
+                - mutatingwebhookconfigurations
+              verbs:
+                - list
+                - watch
+            - apiGroups:
+                - apiextensions.k8s.io
+              resourceNames:
+                - bfdprofiles.metallb.io
+                - bgpadvertisements.metallb.io
+                - bgppeers.metallb.io
+                - ipaddresspools.metallb.io
+                - l2advertisements.metallb.io
+                - communities.metallb.io
+              resources:
+                - customresourcedefinitions
+              verbs:
+                - create
+                - delete
+                - get
+                - list
+                - patch
+                - update
+                - watch
+            - apiGroups:
+                - apiextensions.k8s.io
+              resources:
+                - customresourcedefinitions
+              verbs:
+                - list
+                - watch
+          serviceAccountName: controller
+        - rules:
+            - apiGroups:
+                - ""
+              resources:
+                - nodes
+              verbs:
+                - get
+                - list
+                - watch
+            - apiGroups:
+                - admissionregistration.k8s.io
+              resources:
+                - validatingwebhookconfigurations
+              verbs:
+                - get
+                - list
+                - watch
+            - apiGroups:
+                - admissionregistration.k8s.io
+              resourceNames:
+                - frr-k8s-validating-webhook-configuration
+              resources:
+                - validatingwebhookconfigurations
+              verbs:
+                - update
+            - apiGroups:
+                - frrk8s.metallb.io
+              resources:
+                - frrconfigurations
+              verbs:
+                - create
+                - delete
+                - get
+                - list
+                - patch
+                - update
+                - watch
+            - apiGroups:
+                - frrk8s.metallb.io
+              resources:
+                - frrconfigurations/finalizers
+              verbs:
+                - update
+            - apiGroups:
+                - frrk8s.metallb.io
+              resources:
+                - frrconfigurations/status
+              verbs:
+                - get
+                - patch
+                - update
+            - apiGroups:
+                - frrk8s.metallb.io
+              resources:
+                - frrnodestates
+              verbs:
+                - create
+                - delete
+                - get
+                - list
+                - patch
+                - update
+                - watch
+            - apiGroups:
+                - frrk8s.metallb.io
+              resources:
+                - frrnodestates/status
+              verbs:
+                - get
+                - patch
+                - update
+            - apiGroups:
+                - authentication.k8s.io
+              resources:
+                - tokenreviews
+              verbs:
+                - create
+            - apiGroups:
+                - authorization.k8s.io
+              resources:
+                - subjectaccessreviews
+              verbs:
+                - create
+          serviceAccountName: frr-k8s-daemon
+        - rules:
+            - apiGroups:
+                - ""
+              resources:
+                - secrets
+              verbs:
+                - create
+                - delete
+                - get
+                - list
+                - patch
+                - update
+                - watch
+            - apiGroups:
+                - admissionregistration.k8s.io
+              resources:
+                - validatingwebhookconfigurations
+              verbs:
+                - create
+                - delete
+                - get
+                - list
+                - patch
+                - update
+                - watch
+            - apiGroups:
+                - apiextensions.k8s.io
+              resources:
+                - customresourcedefinitions
+              verbs:
+                - get
+                - list
+                - watch
+            - apiGroups:
+                - metallb.io
+              resources:
+                - metallbs
+              verbs:
+                - create
+                - delete
+                - get
+                - list
+                - patch
+                - update
+                - watch
+            - apiGroups:
+                - metallb.io
+              resources:
+                - metallbs/finalizers
+              verbs:
+                - delete
+                - get
+                - patch
+                - update
+            - apiGroups:
+                - metallb.io
+              resources:
+                - metallbs/status
+              verbs:
+                - get
+                - patch
+                - update
+            - apiGroups:
+                - monitoring.coreos.com
+              resources:
+                - podmonitors
+              verbs:
+                - create
+                - delete
+                - get
+                - list
+                - patch
+                - update
+                - watch
+            - apiGroups:
+                - monitoring.coreos.com
+              resources:
+                - servicemonitors
+              verbs:
+                - create
+                - delete
+                - get
+                - list
+                - patch
+                - update
+                - watch
+            - apiGroups:
+                - policy
+              resources:
+                - podsecuritypolicies
+              verbs:
+                - create
+                - delete
+                - get
+                - list
+                - patch
+                - update
+                - watch
+          serviceAccountName: manager-account
+        - rules:
+            - apiGroups:
+                - authentication.k8s.io
+              resources:
+                - tokenreviews
+              verbs:
+                - create
+            - apiGroups:
+                - authorization.k8s.io
+              resources:
+                - subjectaccessreviews
+              verbs:
+                - create
+            - apiGroups:
+                - metallb.io
+              resources:
+                - servicel2statuses
+                - servicel2statuses/status
+              verbs:
+                - '*'
+            - apiGroups:
+                - ""
+              resources:
+                - services
+                - endpoints
+                - nodes
+                - namespaces
+              verbs:
+                - get
+                - list
+                - watch
+            - apiGroups:
+                - discovery.k8s.io
+              resources:
+                - endpointslices
+              verbs:
+                - get
+                - list
+                - watch
+            - apiGroups:
+                - ""
+              resources:
+                - events
+              verbs:
+                - create
+                - patch
+            - apiGroups:
+                - policy
+              resourceNames:
+                - speaker
+              resources:
+                - podsecuritypolicies
+              verbs:
+                - use
+          serviceAccountName: speaker
       deployments:
-      - label:
-          control-plane: controller-manager
-        name: metallb-operator-controller-manager
-        spec:
-          replicas: 1
-          selector:
-            matchLabels:
-              control-plane: controller-manager
-          strategy: {}
-          template:
-            metadata:
-              labels:
+        - label:
+            control-plane: controller-manager
+          name: metallb-operator-controller-manager
+          spec:
+            replicas: 1
+            selector:
+              matchLabels:
                 control-plane: controller-manager
-            spec:
-              containers:
-              - args:
-                - --enable-leader-election
-                - --disable-cert-rotation=true
-                command:
-                - /manager
-                env:
-                - name: SPEAKER_IMAGE
-                  value: quay.io/openshift/origin-metallb:4.17
-                - name: CONTROLLER_IMAGE
-                  value: quay.io/openshift/origin-metallb:4.17
-                - name: ENABLE_OPERATOR_WEBHOOK
-                  value: "true"
-                - name: FRR_IMAGE
-                  value: quay.io/openshift/origin-metallb-frr:4.17
-                - name: FRRK8S_IMAGE
-                  value: quay.io/openshift/origin-metallb-frr:4.17
-                - name: KUBE_RBAC_PROXY_IMAGE
-                  value: quay.io/openshift/origin-kube-rbac-proxy:4.16
-                - name: DEPLOY_KUBE_RBAC_PROXIES
-                  value: "true"
-                - name: DEPLOY_PODMONITORS
-                  value: "false"
-                - name: DEPLOY_SERVICEMONITORS
-                  value: "true"
-                - name: ENABLE_WEBHOOK
-                  value: "true"
-                - name: OPERATOR_NAMESPACE
-                  valueFrom:
-                    fieldRef:
-                      fieldPath: metadata.namespace
-                - name: METRICS_PORT
-                  value: "29150"
-                - name: HTTPS_METRICS_PORT
-                  value: "9120"
-                - name: FRR_METRICS_PORT
-                  value: "29151"
-                - name: FRR_HTTPS_METRICS_PORT
-                  value: "9121"
-                - name: MEMBER_LIST_BIND_PORT
-                  value: "9122"
-                image: quay.io/openshift/origin-metallb-operator:4.17
-                name: manager
-                ports:
-                - containerPort: 9443
-                  name: webhook-server
-                  protocol: TCP
-                readinessProbe:
-                  failureThreshold: 3
-                  httpGet:
-                    path: /readyz
-                    port: 8080
-                  initialDelaySeconds: 30
-                  periodSeconds: 10
-                  successThreshold: 1
-                  timeoutSeconds: 1
-                resources:
-                  requests:
-                    cpu: 50m
-                    memory: 20Mi
-                volumeMounts:
-                - mountPath: /tmp/k8s-webhook-server/serving-certs
-                  name: cert
-                  readOnly: true
-              serviceAccountName: manager-account
-              terminationGracePeriodSeconds: 10
-              volumes:
-              - name: cert
-                secret:
-                  defaultMode: 420
-                  secretName: metallb-operator-webhook-server-cert
-      - label:
-          app: metallb
-          component: webhook-server
-        name: metallb-operator-webhook-server
-        spec:
-          revisionHistoryLimit: 3
-          selector:
-            matchLabels:
-              app: metallb
-              component: webhook-server
-          strategy: {}
-          template:
-            metadata:
-              annotations:
-                prometheus.io/port: "7472"
-                prometheus.io/scrape: "true"
-              labels:
+            strategy: {}
+            template:
+              metadata:
+                labels:
+                  control-plane: controller-manager
+              spec:
+                containers:
+                  - args:
+                      - --enable-leader-election
+                      - --disable-cert-rotation=true
+                    command:
+                      - /manager
+                    env:
+                      - name: SPEAKER_IMAGE
+                        value: quay.io/openshift/origin-metallb:4.17
+                      - name: CONTROLLER_IMAGE
+                        value: quay.io/openshift/origin-metallb:4.17
+                      - name: FRR_IMAGE
+                        value: quay.io/openshift/origin-metallb-frr:4.17
+                      - name: KUBE_RBAC_PROXY_IMAGE
+                        value: quay.io/openshift/origin-kube-rbac-proxy:4.16
+                      - name: DEPLOY_KUBE_RBAC_PROXIES
+                        value: "true"
+                      - name: FRRK8S_IMAGE
+                        value: quay.io/openshift/origin-metallb-frr:4.17                  
+                      - name: OPERATOR_NAMESPACE
+                        valueFrom:
+                          fieldRef:
+                            fieldPath: metadata.namespace
+                      - name: DEPLOY_PODMONITORS
+                        value: "false"
+                      - name: DEPLOY_SERVICEMONITORS
+                        value: "true"
+                      - name: ENABLE_WEBHOOK
+                        value: "true"                      
+                      - name: ENABLE_OPERATOR_WEBHOOK
+                        value: "true"
+                      - name: METRICS_PORT
+                        value: "29150"
+                      - name: HTTPS_METRICS_PORT
+                        value: "9120"
+                      - name: FRR_METRICS_PORT
+                        value: "29151"
+                      - name: FRR_HTTPS_METRICS_PORT
+                        value: "9121"
+                      - name: MEMBER_LIST_BIND_PORT
+                        value: "9122"
+                    image: quay.io/openshift/origin-metallb-operator:4.17
+                    name: manager
+                    ports:
+                      - containerPort: 9443
+                        name: webhook-server
+                        protocol: TCP
+                    readinessProbe:
+                      failureThreshold: 3
+                      httpGet:
+                        path: /readyz
+                        port: 8080
+                      initialDelaySeconds: 30
+                      periodSeconds: 10
+                      successThreshold: 1
+                      timeoutSeconds: 1
+                    resources:
+                      requests:
+                        cpu: 50m
+                        memory: 20Mi
+                    volumeMounts:
+                      - mountPath: /tmp/k8s-webhook-server/serving-certs
+                        name: cert
+                        readOnly: true
+                serviceAccountName: manager-account
+                terminationGracePeriodSeconds: 10
+                volumes:
+                  - name: cert
+                    secret:
+                      defaultMode: 420
+                      secretName: metallb-operator-webhook-server-cert
+        - label:
+            app: metallb
+            component: webhook-server
+          name: metallb-operator-webhook-server
+          spec:
+            revisionHistoryLimit: 3
+            selector:
+              matchLabels:
                 app: metallb
                 component: webhook-server
-            spec:
-              containers:
-              - args:
-                - --disable-cert-rotation=true
-                - --port=7472
-                - --log-level=info
-                - --webhook-mode=onlywebhook
-                command:
-                - /controller
-                env:
-                - name: METALLB_BGP_TYPE
-                  value: frr
-                image: quay.io/openshift/origin-metallb:4.17
-                livenessProbe:
-                  failureThreshold: 3
-                  httpGet:
-                    path: /metrics
-                    port: monitoring
-                  initialDelaySeconds: 10
-                  periodSeconds: 10
-                  successThreshold: 1
-                  timeoutSeconds: 1
-                name: webhook-server
-                ports:
-                - containerPort: 7472
-                  name: monitoring
-                - containerPort: 9443
-                  name: webhook-server
-                  protocol: TCP
-                readinessProbe:
-                  failureThreshold: 3
-                  httpGet:
-                    path: /metrics
-                    port: monitoring
-                  initialDelaySeconds: 10
-                  periodSeconds: 10
-                  successThreshold: 1
-                  timeoutSeconds: 1
-                resources: {}
-                volumeMounts:
-                - mountPath: /tmp/k8s-webhook-server/serving-certs
-                  name: cert
-                  readOnly: true
-              nodeSelector:
-                kubernetes.io/os: linux
-              serviceAccountName: controller
-              terminationGracePeriodSeconds: 0
-              volumes:
-              - name: cert
-                secret:
-                  defaultMode: 420
-                  secretName: metallb-webhook-cert
+            strategy: {}
+            template:
+              metadata:
+                annotations:
+                  prometheus.io/port: "7472"
+                  prometheus.io/scrape: "true"
+                labels:
+                  app: metallb
+                  component: webhook-server
+              spec:
+                containers:
+                  - args:
+                      - --disable-cert-rotation=true
+                      - --port=7472
+                      - --log-level=info
+                      - --webhook-mode=onlywebhook
+                    command:
+                    - /controller
+                    env:
+                      - name: METALLB_BGP_TYPE
+                        value: frr
+                    image: quay.io/openshift/origin-metallb:4.17
+                    livenessProbe:
+                      failureThreshold: 3
+                      httpGet:
+                        path: /metrics
+                        port: monitoring
+                      initialDelaySeconds: 10
+                      periodSeconds: 10
+                      successThreshold: 1
+                      timeoutSeconds: 1
+                    name: webhook-server
+                    ports:
+                      - containerPort: 7472
+                        name: monitoring
+                      - containerPort: 9443
+                        name: webhook-server
+                        protocol: TCP
+                    readinessProbe:
+                      failureThreshold: 3
+                      httpGet:
+                        path: /metrics
+                        port: monitoring
+                      initialDelaySeconds: 10
+                      periodSeconds: 10
+                      successThreshold: 1
+                      timeoutSeconds: 1
+                    resources: {}
+                    volumeMounts:
+                      - mountPath: /tmp/k8s-webhook-server/serving-certs
+                        name: cert
+                        readOnly: true
+                nodeSelector:
+                  kubernetes.io/os: linux
+                serviceAccountName: controller
+                terminationGracePeriodSeconds: 0
+                volumes:
+                  - name: cert
+                    secret:
+                      defaultMode: 420
+                      secretName: metallb-webhook-cert
       permissions:
-      - rules:
-        - apiGroups:
-          - ""
-          resources:
-          - secrets
-          verbs:
-          - create
-          - delete
-          - get
-          - list
-          - patch
-          - update
-          - watch
-        - apiGroups:
-          - ""
-          resourceNames:
-          - memberlist
-          resources:
-          - secrets
-          verbs:
-          - list
-        - apiGroups:
-          - apps
-          resourceNames:
-          - controller
-          resources:
-          - deployments
-          verbs:
-          - get
-        - apiGroups:
-          - metallb.io
-          resources:
-          - bgppeers
-          verbs:
-          - get
-          - list
-        - apiGroups:
-          - metallb.io
-          resources:
-          - bfdprofiles
-          verbs:
-          - get
-          - list
-          - watch
-        - apiGroups:
-          - metallb.io
-          resources:
-          - ipaddresspools
-          verbs:
-          - get
-          - list
-          - watch
-        - apiGroups:
-          - metallb.io
-          resources:
-          - bgpadvertisements
-          verbs:
-          - get
-          - list
-          - watch
-        - apiGroups:
-          - metallb.io
-          resources:
-          - l2advertisements
-          verbs:
-          - get
-          - list
-          - watch
-        - apiGroups:
-          - metallb.io
-          resources:
-          - communities
-          verbs:
-          - get
-          - list
-          - watch
-        serviceAccountName: controller
-      - rules:
-          - apiGroups:
-              - ""
-            resources:
-              - secrets
-            verbs:
-              - get
-              - list
-              - watch
-              - update
-          - apiGroups:
-              - security.openshift.io
-            resourceNames:
-              - privileged
-            resources:
-              - securitycontextconstraints
-            verbs:
-              - use
-        serviceAccountName: frr-k8s-daemon
-      - rules:
-        - apiGroups:
-          - ""
-          resources:
-          - configmaps
-          verbs:
-          - create
-          - delete
-          - get
-          - list
-          - patch
-          - update
-          - watch
-        - apiGroups:
-          - ""
-          resources:
-          - events
-          verbs:
-          - create
-          - patch
-        - apiGroups:
-          - ""
-          resources:
-          - services
-          verbs:
-          - create
-          - delete
-          - get
-          - patch
-          - update
-        - apiGroups:
-          - apps
-          resources:
-          - daemonsets
-          - deployments
-          verbs:
-          - create
-          - delete
-          - get
-          - list
-          - patch
-          - update
-          - watch
-        - apiGroups:
-          - coordination.k8s.io
-          resources:
-          - leases
-          verbs:
-          - create
-          - delete
-          - get
-          - list
-          - patch
-          - update
-          - watch
-        serviceAccountName: manager-account
-      - rules:
-        - apiGroups:
-            - frrk8s.metallb.io
-          resources:
-            - frrconfigurations
-          verbs:
-            - get
-            - list
-            - watch
-            - create
-            - update
-        - apiGroups:
-          - ""
-          resources:
-          - pods
-          verbs:
-          - list
-        - apiGroups:
-          - ""
-          resources:
-          - secrets
-          verbs:
-          - get
-          - list
-          - watch
-        - apiGroups:
-          - ""
-          resources:
-          - configmaps
-          verbs:
-          - get
-          - list
-          - watch
-        - apiGroups:
-          - metallb.io
-          resources:
-          - bfdprofiles
-          verbs:
-          - get
-          - list
-          - watch
-        - apiGroups:
-          - metallb.io
-          resources:
-          - bgppeers
-          verbs:
-          - get
-          - list
-          - watch
-        - apiGroups:
-          - metallb.io
-          resources:
-          - l2advertisements
-          verbs:
-          - get
-          - list
-          - watch
-        - apiGroups:
-          - metallb.io
-          resources:
-          - bgpadvertisements
-          verbs:
-          - get
-          - list
-          - watch
-        - apiGroups:
-          - metallb.io
-          resources:
-          - ipaddresspools
-          verbs:
-          - get
-          - list
-          - watch
-        - apiGroups:
-          - metallb.io
-          resources:
-          - communities
-          verbs:
-          - get
-          - list
-          - watch
-        - apiGroups:
-          - security.openshift.io
-          resourceNames:
-          - privileged
-          resources:
-          - securitycontextconstraints
-          verbs:
-          - use
-        serviceAccountName: speaker
+        - rules:
+            - apiGroups:
+                - ""
+              resources:
+                - secrets
+              verbs:
+                - create
+                - delete
+                - get
+                - list
+                - patch
+                - update
+                - watch
+            - apiGroups:
+                - ""
+              resourceNames:
+                - memberlist
+              resources:
+                - secrets
+              verbs:
+                - list
+            - apiGroups:
+                - apps
+              resourceNames:
+                - controller
+              resources:
+                - deployments
+              verbs:
+                - get
+            - apiGroups:
+                - metallb.io
+              resources:
+                - bgppeers
+              verbs:
+                - get
+                - list
+            - apiGroups:
+                - metallb.io
+              resources:
+                - bfdprofiles
+              verbs:
+                - get
+                - list
+                - watch
+            - apiGroups:
+                - metallb.io
+              resources:
+                - ipaddresspools
+              verbs:
+                - get
+                - list
+                - watch
+            - apiGroups:
+                - metallb.io
+              resources:
+                - bgpadvertisements
+              verbs:
+                - get
+                - list
+                - watch
+            - apiGroups:
+                - metallb.io
+              resources:
+                - l2advertisements
+              verbs:
+                - get
+                - list
+                - watch
+            - apiGroups:
+                - metallb.io
+              resources:
+                - communities
+              verbs:
+                - get
+                - list
+                - watch
+          serviceAccountName: controller
+        - rules:
+            - apiGroups:
+                - ""
+              resources:
+                - secrets
+              verbs:
+                - get
+                - list
+                - watch
+                - update
+            - apiGroups:
+                - security.openshift.io
+              resourceNames:
+                - privileged
+              resources:
+                - securitycontextconstraints
+              verbs:
+                - use
+          serviceAccountName: frr-k8s-daemon
+        - rules:
+            - apiGroups:
+                - ""
+              resources:
+                - configmaps
+              verbs:
+                - create
+                - delete
+                - get
+                - list
+                - patch
+                - update
+                - watch
+            - apiGroups:
+                - ""
+              resources:
+                - events
+              verbs:
+                - create
+                - patch
+            - apiGroups:
+                - ""
+              resources:
+                - services
+              verbs:
+                - create
+                - delete
+                - get
+                - patch
+                - update
+            - apiGroups:
+                - apps
+              resources:
+                - daemonsets
+                - deployments
+              verbs:
+                - create
+                - delete
+                - get
+                - list
+                - patch
+                - update
+                - watch
+            - apiGroups:
+                - coordination.k8s.io
+              resources:
+                - leases
+              verbs:
+                - create
+                - delete
+                - get
+                - list
+                - patch
+                - update
+                - watch
+          serviceAccountName: manager-account
+        - rules:
+            - apiGroups:
+                - frrk8s.metallb.io
+              resources:
+                - frrconfigurations
+              verbs:
+                - get
+                - list
+                - watch
+                - create
+                - update
+            - apiGroups:
+                - ""
+              resources:
+                - pods
+              verbs:
+                - list
+                - get
+            - apiGroups:
+                - ""
+              resources:
+                - secrets
+              verbs:
+                - get
+                - list
+                - watch
+            - apiGroups:
+                - ""
+              resources:
+                - configmaps
+              verbs:
+                - get
+                - list
+                - watch
+            - apiGroups:
+                - metallb.io
+              resources:
+                - bfdprofiles
+              verbs:
+                - get
+                - list
+                - watch
+            - apiGroups:
+                - metallb.io
+              resources:
+                - bgppeers
+              verbs:
+                - get
+                - list
+                - watch
+            - apiGroups:
+                - metallb.io
+              resources:
+                - l2advertisements
+              verbs:
+                - get
+                - list
+                - watch
+            - apiGroups:
+                - metallb.io
+              resources:
+                - bgpadvertisements
+              verbs:
+                - get
+                - list
+                - watch
+            - apiGroups:
+                - metallb.io
+              resources:
+                - ipaddresspools
+              verbs:
+                - get
+                - list
+                - watch
+            - apiGroups:
+                - metallb.io
+              resources:
+                - communities
+              verbs:
+                - get
+                - list
+                - watch
+            - apiGroups:
+                - security.openshift.io
+              resourceNames:
+                - privileged
+              resources:
+                - securitycontextconstraints
+              verbs:
+                - use
+          serviceAccountName: speaker
     strategy: deployment
   installModes:
-  - supported: false
-    type: OwnNamespace
-  - supported: false
-    type: SingleNamespace
-  - supported: false
-    type: MultiNamespace
-  - supported: true
-    type: AllNamespaces
+    - supported: false
+      type: OwnNamespace
+    - supported: false
+      type: SingleNamespace
+    - supported: false
+      type: MultiNamespace
+    - supported: true
+      type: AllNamespaces
   keywords:
-  - metallb-operator
+    - metallb-operator
   labels:
     olm-owner-enterprise-app: metallb-operator
     olm-status-descriptors: metallb-operator.v4.17.0
   links:
-  - name: MetalLB Operator
-    url: https://github.com/openshift/metallb-operator
+    - name: MetalLB Operator
+      url: https://github.com/openshift/metallb-operator
   maintainers:
-  - email: fpaoline@redhat.com
-    name: Federico Paolinelli
-  - email: obraunsh@redhat.com
-    name: Ori Braunshtein
+    - email: fpaoline@redhat.com
+      name: Federico Paolinelli
+    - email: obraunsh@redhat.com
+      name: Ori Braunshtein
   maturity: alpha
   minKubeVersion: 1.26.0
   provider:
     name: Red Hat
   version: 4.17.0
   webhookdefinitions:
-  - admissionReviewVersions:
-    - v1
-    containerPort: 443
-    deploymentName: metallb-operator-webhook-server
-    failurePolicy: Fail
-    generateName: bfdprofilevalidationwebhook.metallb.io
-    rules:
-    - apiGroups:
-      - metallb.io
-      apiVersions:
-      - v1beta1
-      operations:
-      - CREATE
-      - DELETE
-      resources:
-      - bfdprofiles
-    sideEffects: None
-    targetPort: 9443
-    type: ValidatingAdmissionWebhook
-    webhookPath: /validate-metallb-io-v1beta1-bfdprofile
-  - admissionReviewVersions:
-    - v1
-    containerPort: 443
-    deploymentName: metallb-operator-webhook-server
-    failurePolicy: Fail
-    generateName: bgpadvertisementvalidationwebhook.metallb.io
-    rules:
-    - apiGroups:
-      - metallb.io
-      apiVersions:
-      - v1beta1
-      operations:
-      - CREATE
-      - UPDATE
-      resources:
-      - bgpadvertisements
-    sideEffects: None
-    targetPort: 9443
-    type: ValidatingAdmissionWebhook
-    webhookPath: /validate-metallb-io-v1beta1-bgpadvertisement
-  - admissionReviewVersions:
-    - v1
-    containerPort: 443
-    deploymentName: metallb-operator-webhook-server
-    failurePolicy: Fail
-    generateName: bgppeersvalidationwebhook.metallb.io
-    rules:
-    - apiGroups:
-      - metallb.io
-      apiVersions:
-      - v1beta2
-      operations:
-      - CREATE
-      - UPDATE
-      resources:
-      - bgppeers
-    sideEffects: None
-    targetPort: 9443
-    type: ValidatingAdmissionWebhook
-    webhookPath: /validate-metallb-io-v1beta2-bgppeer
-  - admissionReviewVersions:
-      - v1beta1
-      - v1beta2
-    containerPort: 443
-    conversionCRDs:
-      - bgppeers.metallb.io
-    deploymentName: metallb-operator-webhook-server
-    generateName: cbgppeers.kb.io
-    sideEffects: None
-    targetPort: 9443
-    type: ConversionWebhook
-    webhookPath: /convert
-  - admissionReviewVersions:
-    - v1
-    containerPort: 443
-    deploymentName: metallb-operator-webhook-server
-    failurePolicy: Fail
-    generateName: communityvalidationwebhook.metallb.io
-    rules:
-    - apiGroups:
-      - metallb.io
-      apiVersions:
-      - v1beta1
-      operations:
-      - CREATE
-      - UPDATE
-      resources:
-      - communities
-    sideEffects: None
-    targetPort: 9443
-    type: ValidatingAdmissionWebhook
-    webhookPath: /validate-metallb-io-v1beta1-community
-  - admissionReviewVersions:
-    - v1
-    containerPort: 443
-    deploymentName: metallb-operator-webhook-server
-    failurePolicy: Fail
-    generateName: ipaddresspoolvalidationwebhook.metallb.io
-    rules:
-    - apiGroups:
-      - metallb.io
-      apiVersions:
-      - v1beta1
-      operations:
-      - CREATE
-      - UPDATE
-      resources:
-      - ipaddresspools
-    sideEffects: None
-    targetPort: 9443
-    type: ValidatingAdmissionWebhook
-    webhookPath: /validate-metallb-io-v1beta1-ipaddresspool
-  - admissionReviewVersions:
-    - v1
-    containerPort: 443
-    deploymentName: metallb-operator-webhook-server
-    failurePolicy: Fail
-    generateName: l2advertisementvalidationwebhook.metallb.io
-    rules:
-    - apiGroups:
-      - metallb.io
-      apiVersions:
-      - v1beta1
-      operations:
-      - CREATE
-      - UPDATE
-      resources:
-      - l2advertisements
-    sideEffects: None
-    targetPort: 9443
-    type: ValidatingAdmissionWebhook
-    webhookPath: /validate-metallb-io-v1beta1-l2advertisement
-  - admissionReviewVersions:
-    - v1
-    containerPort: 443
-    deploymentName: metallb-operator-controller-manager
-    failurePolicy: Fail
-    generateName: metallbvalidationwebhook.metallb.io
-    rules:
-    - apiGroups:
-      - metallb.io
-      apiVersions:
-      - v1beta1
-      operations:
-      - CREATE
-      - UPDATE
-      resources:
-      - metallbs
-    sideEffects: None
-    targetPort: 9443
-    type: ValidatingAdmissionWebhook
-    webhookPath: /validate-metallb-io-v1beta1-metallb
+    - admissionReviewVersions:
+        - v1
+      containerPort: 443
+      deploymentName: metallb-operator-webhook-server
+      failurePolicy: Fail
+      generateName: bfdprofilevalidationwebhook.metallb.io
+      rules:
+        - apiGroups:
+            - metallb.io
+          apiVersions:
+            - v1beta1
+          operations:
+            - CREATE
+            - DELETE
+          resources:
+            - bfdprofiles
+      sideEffects: None
+      targetPort: 9443
+      type: ValidatingAdmissionWebhook
+      webhookPath: /validate-metallb-io-v1beta1-bfdprofile
+    - admissionReviewVersions:
+        - v1
+      containerPort: 443
+      deploymentName: metallb-operator-webhook-server
+      failurePolicy: Fail
+      generateName: bgpadvertisementvalidationwebhook.metallb.io
+      rules:
+        - apiGroups:
+            - metallb.io
+          apiVersions:
+            - v1beta1
+          operations:
+            - CREATE
+            - UPDATE
+          resources:
+            - bgpadvertisements
+      sideEffects: None
+      targetPort: 9443
+      type: ValidatingAdmissionWebhook
+      webhookPath: /validate-metallb-io-v1beta1-bgpadvertisement
+    - admissionReviewVersions:
+        - v1
+      containerPort: 443
+      deploymentName: metallb-operator-webhook-server
+      failurePolicy: Fail
+      generateName: bgppeersvalidationwebhook.metallb.io
+      rules:
+        - apiGroups:
+            - metallb.io
+          apiVersions:
+            - v1beta2
+          operations:
+            - CREATE
+            - UPDATE
+          resources:
+            - bgppeers
+      sideEffects: None
+      targetPort: 9443
+      type: ValidatingAdmissionWebhook
+      webhookPath: /validate-metallb-io-v1beta2-bgppeer
+    - admissionReviewVersions:
+        - v1beta1
+        - v1beta2
+      containerPort: 443
+      conversionCRDs:
+        - bgppeers.metallb.io
+      deploymentName: metallb-operator-webhook-server
+      generateName: cbgppeers.kb.io
+      sideEffects: None
+      targetPort: 9443
+      type: ConversionWebhook
+      webhookPath: /convert
+    - admissionReviewVersions:
+        - v1
+      containerPort: 443
+      deploymentName: metallb-operator-webhook-server
+      failurePolicy: Fail
+      generateName: communityvalidationwebhook.metallb.io
+      rules:
+        - apiGroups:
+            - metallb.io
+          apiVersions:
+            - v1beta1
+          operations:
+            - CREATE
+            - UPDATE
+          resources:
+            - communities
+      sideEffects: None
+      targetPort: 9443
+      type: ValidatingAdmissionWebhook
+      webhookPath: /validate-metallb-io-v1beta1-community
+    - admissionReviewVersions:
+        - v1
+      containerPort: 443
+      deploymentName: metallb-operator-webhook-server
+      failurePolicy: Fail
+      generateName: ipaddresspoolvalidationwebhook.metallb.io
+      rules:
+        - apiGroups:
+            - metallb.io
+          apiVersions:
+            - v1beta1
+          operations:
+            - CREATE
+            - UPDATE
+          resources:
+            - ipaddresspools
+      sideEffects: None
+      targetPort: 9443
+      type: ValidatingAdmissionWebhook
+      webhookPath: /validate-metallb-io-v1beta1-ipaddresspool
+    - admissionReviewVersions:
+        - v1
+      containerPort: 443
+      deploymentName: metallb-operator-webhook-server
+      failurePolicy: Fail
+      generateName: l2advertisementvalidationwebhook.metallb.io
+      rules:
+        - apiGroups:
+            - metallb.io
+          apiVersions:
+            - v1beta1
+          operations:
+            - CREATE
+            - UPDATE
+          resources:
+            - l2advertisements
+      sideEffects: None
+      targetPort: 9443
+      type: ValidatingAdmissionWebhook
+      webhookPath: /validate-metallb-io-v1beta1-l2advertisement
+    - admissionReviewVersions:
+        - v1
+      containerPort: 443
+      deploymentName: metallb-operator-controller-manager
+      failurePolicy: Fail
+      generateName: metallbvalidationwebhook.metallb.io
+      rules:
+        - apiGroups:
+            - metallb.io
+          apiVersions:
+            - v1beta1
+          operations:
+            - CREATE
+            - UPDATE
+          resources:
+            - metallbs
+      sideEffects: None
+      targetPort: 9443
+      type: ValidatingAdmissionWebhook
+      webhookPath: /validate-metallb-io-v1beta1-metallb
