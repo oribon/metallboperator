@@ -807,6 +807,16 @@ spec:
               verbs:
                 - create
             - apiGroups:
+                - frrk8s.metallb.io
+              resources:
+                - frrconfigurations
+              verbs:
+                - get
+                - list
+                - watch
+                - create
+                - update
+            - apiGroups:
                 - metallb.io
               resources:
                 - servicel2statuses
@@ -1159,16 +1169,6 @@ spec:
                 - watch
           serviceAccountName: manager-account
         - rules:
-            - apiGroups:
-                - frrk8s.metallb.io
-              resources:
-                - frrconfigurations
-              verbs:
-                - get
-                - list
-                - watch
-                - create
-                - update
             - apiGroups:
                 - ""
               resources:
