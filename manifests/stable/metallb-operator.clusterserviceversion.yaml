@@ -887,11 +887,11 @@ spec:
                       - name: FRR_IMAGE
                         value: quay.io/openshift/origin-metallb-frr:4.17
                       - name: KUBE_RBAC_PROXY_IMAGE
-                        value: quay.io/openshift/origin-kube-rbac-proxy:4.16
+                        value: quay.io/openshift/origin-kube-rbac-proxy:4.17
                       - name: DEPLOY_KUBE_RBAC_PROXIES
                         value: "true"
                       - name: FRRK8S_IMAGE
-                        value: quay.io/openshift/origin-metallb-frr:4.17                  
+                        value: quay.io/openshift/origin-metallb-frr:4.17
                       - name: OPERATOR_NAMESPACE
                         valueFrom:
                           fieldRef:
@@ -901,7 +901,7 @@ spec:
                       - name: DEPLOY_SERVICEMONITORS
                         value: "true"
                       - name: ENABLE_WEBHOOK
-                        value: "true"                      
+                        value: "true"
                       - name: ENABLE_OPERATOR_WEBHOOK
                         value: "true"
                       - name: METRICS_PORT
