@@ -28,13 +28,15 @@ import (
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
+	"sigs.k8s.io/controller-runtime/pkg/handler"
 
 	metallbv1beta1 "github.com/metallb/metallb-operator/api/v1beta1"
 	"github.com/metallb/metallb-operator/pkg/apply"
 	"github.com/metallb/metallb-operator/pkg/helm"
+	"github.com/metallb/metallb-operator/pkg/openshift"
 	"github.com/metallb/metallb-operator/pkg/params"
-	"github.com/metallb/metallb-operator/pkg/platform"
 	"github.com/metallb/metallb-operator/pkg/status"
+	openshiftapiv1 "github.com/openshift/api/operator/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 )
 
@@ -51,13 +53,14 @@ type MetalLBReconciler struct {
 	frrk8sChart  *helm.FRRK8SChart
 	Log          logr.Logger
 	Scheme       *runtime.Scheme
-	PlatformInfo platform.PlatformInfo
 	Namespace    string
 	EnvConfig    params.EnvConfig
 }
 
 var MetalLBChartPath = MetalLBChartPathController
 var FRRK8SChartPath = FRRK8SChartPathController
+
+var EmbeddedFRRK8sSupportNotAvailable = errors.New("current CNO version does not support deploying frr-k8s")
 
 // Namespace Scoped
 // +kubebuilder:rbac:groups=apps,namespace=metallb-system,resources=deployments;daemonsets,verbs=get;list;watch;create;update;patch;delete
@@ -76,6 +79,8 @@ var FRRK8SChartPath = FRRK8SChartPathController
 // +kubebuilder:rbac:groups=apiextensions.k8s.io,resources=customresourcedefinitions,verbs=get;list;watch
 // +kubebuilder:rbac:groups=admissionregistration.k8s.io,resources=validatingwebhookconfigurations,verbs=create;delete;get;update;patch;list;watch
 // +kubebuilder:rbac:groups="",resources=secrets,verbs=create;delete;get;update;patch;list;watch
+// +kubebuilder:rbac:groups=operator.openshift.io,resources=networks,verbs=get;list;watch;update;
+// +kubebuilder:rbac:groups=config.openshift.io,resources=clusteroperators,verbs=get;list;watch;
 
 func (r *MetalLBReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	_ = context.Background()
@@ -124,7 +129,10 @@ func (r *MetalLBReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ct
 }
 
 func (r *MetalLBReconciler) reconcileResource(ctx context.Context, req ctrl.Request, instance *metallbv1beta1.MetalLB) (ctrl.Result, string, error) {
-	err := r.syncMetalLBResources(instance)
+	err := r.syncMetalLBResources(ctx, instance)
+	if errors.Is(err, EmbeddedFRRK8sSupportNotAvailable) {
+		return ctrl.Result{RequeueAfter: 2 * time.Minute}, "", nil
+	}
 	if err != nil {
 		return ctrl.Result{}, status.ConditionDegraded, errors.Wrapf(err, "FailedToSyncMetalLBResources")
 	}
@@ -149,14 +157,35 @@ func (r *MetalLBReconciler) SetupWithManager(mgr ctrl.Manager) error {
 		return err
 	}
 
+	if r.EnvConfig.IsOpenshift {
+		return ctrl.NewControllerManagedBy(mgr).
+			For(&metallbv1beta1.MetalLB{}).
+			Watches(&openshiftapiv1.Network{}, &handler.EnqueueRequestForObject{}).
+			Complete(r)
+	}
 	return ctrl.NewControllerManagedBy(mgr).
 		For(&metallbv1beta1.MetalLB{}).
 		Complete(r)
 }
 
-func (r *MetalLBReconciler) syncMetalLBResources(config *metallbv1beta1.MetalLB) error {
+func (r *MetalLBReconciler) syncMetalLBResources(ctx context.Context, config *metallbv1beta1.MetalLB) error {
 	logger := r.Log.WithName("syncMetalLBResources")
 	logger.Info("Start")
+
+	bgpType := params.BGPType(config, r.EnvConfig)
+	if r.EnvConfig.MustDeployFRRK8sFromCNO && r.EnvConfig.IsOpenshift && (bgpType == metallbv1beta1.FRRK8sExternalMode) {
+		supportsFRRK8s, err := openshift.SupportsFRRK8s(ctx, r.Client)
+		if err != nil {
+			return err
+		}
+		if !supportsFRRK8s {
+			return EmbeddedFRRK8sSupportNotAvailable
+		}
+
+		if err := openshift.DeployFRRK8s(ctx, r.Client); err != nil {
+			return err
+		}
+	}
 
 	err := config.Validate()
 	if err != nil {
@@ -175,7 +204,7 @@ func (r *MetalLBReconciler) syncMetalLBResources(config *metallbv1beta1.MetalLB)
 		return err
 	}
 
-	if params.BGPType(config, r.EnvConfig.IsOpenshift) == metallbv1beta1.FRRK8sMode {
+	if bgpType == metallbv1beta1.FRRK8sMode {
 		objs = append(objs, frrk8sObjs...)
 	} else {
 		toDel = append(toDel, frrk8sObjs...)
