@@ -728,6 +728,14 @@ spec:
                 - list
                 - watch
             - apiGroups:
+                - config.openshift.io
+              resources:
+                - clusteroperators
+              verbs:
+                - get
+                - list
+                - watch
+            - apiGroups:
                 - metallb.io
               resources:
                 - metallbs
@@ -778,6 +786,15 @@ spec:
                 - get
                 - list
                 - patch
+                - update
+                - watch
+            - apiGroups:
+                - operator.openshift.io
+              resources:
+                - networks
+              verbs:
+                - get
+                - list
                 - update
                 - watch
             - apiGroups:

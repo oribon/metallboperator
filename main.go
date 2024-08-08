@@ -48,6 +48,8 @@ import (
 	"github.com/metallb/metallb-operator/pkg/params"
 	"github.com/metallb/metallb-operator/pkg/platform"
 	"github.com/open-policy-agent/cert-controller/pkg/rotator"
+	openshiftconfigv1 "github.com/openshift/api/config/v1"
+	openshiftapiv1 "github.com/openshift/api/operator/v1"
 	// +kubebuilder:scaffold:imports
 )
 
@@ -72,6 +74,8 @@ func init() {
 	utilruntime.Must(policyv1beta1.AddToScheme(scheme))
 	utilruntime.Must(rbacv1.AddToScheme(scheme))
 	utilruntime.Must(apiext.AddToScheme(scheme))
+	utilruntime.Must(openshiftapiv1.AddToScheme(scheme))
+	utilruntime.Must(openshiftconfigv1.AddToScheme(scheme))
 
 	// +kubebuilder:scaffold:scheme
 }
@@ -154,7 +158,7 @@ func main() {
 		setupLog.Info("waiting to create operator webhook for MetalLB CR")
 		<-setupFinished
 		setupLog.Info("creating operator webhook for MetalLB CR")
-		if err = (&metallbv1beta1.MetalLB{}).SetupWebhookWithManager(mgr); err != nil {
+		if err = (&metallbv1beta1.MetalLB{}).SetupWebhookWithManager(mgr, envParams.FRRK8sExternalNamespace); err != nil {
 			setupLog.Error(err, "unable to create webhook", "operator webhook", "MetalLB")
 			os.Exit(1)
 		}
