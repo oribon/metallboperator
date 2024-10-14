@@ -831,6 +831,7 @@ spec:
                 - watch
                 - create
                 - update
+                - delete
             - apiGroups:
                 - metallb.io
               resources:
