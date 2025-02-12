@@ -174,7 +174,7 @@ func (r *MetalLBReconciler) syncMetalLBResources(ctx context.Context, config *me
 
 	bgpType := params.BGPType(config, r.EnvConfig)
 	if r.EnvConfig.MustDeployFRRK8sFromCNO && r.EnvConfig.IsOpenshift && (bgpType == metallbv1beta1.FRRK8sExternalMode) {
-		supportsFRRK8s, err := openshift.SupportsFRRK8s(ctx, r.Client)
+		supportsFRRK8s, err := openshift.SupportsFRRK8s(ctx, r.Client, r.EnvConfig)
 		if err != nil {
 			return err
 		}
@@ -245,6 +245,9 @@ func (r *MetalLBReconciler) syncMetalLBResources(ctx context.Context, config *me
 }
 
 func validateBGPMode(config *metallbv1beta1.MetalLB, isOpenshift bool) error {
+	if config.Spec.BGPBackend == metallbv1beta1.FRRK8sExternalMode && isOpenshift {
+		return nil
+	}
 	if config.Spec.BGPBackend != "" &&
 		config.Spec.BGPBackend != metallbv1beta1.NativeMode &&
 		config.Spec.BGPBackend != metallbv1beta1.FRRK8sMode &&
