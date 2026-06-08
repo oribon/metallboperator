@@ -2,6 +2,8 @@ package openshift
 
 import (
 	"context"
+	"crypto/tls"
+	"strconv"
 	"strings"
 
 	"github.com/go-logr/logr"
@@ -12,6 +14,19 @@ import (
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
+
+// TODO(curves): check if controller-runtime-common adds a TLSGroup-to-CurveID
+// translation helper so we can reuse it instead of maintaining this map.
+// https://github.com/openshift/controller-runtime-common/blob/64ee174f5e2ebc630fbb554dd114d7a7a878693f/pkg/tls/tls.go#L123
+var tlsGroupToCurveID = map[configv1.TLSGroup]uint16{
+	configv1.TLSGroupX25519:             uint16(tls.X25519),
+	configv1.TLSGroupSecP256r1:          uint16(tls.CurveP256),
+	configv1.TLSGroupSecP384r1:          uint16(tls.CurveP384),
+	configv1.TLSGroupSecP521r1:          uint16(tls.CurveP521),
+	configv1.TLSGroupX25519MLKEM768:     uint16(tls.X25519MLKEM768),
+	configv1.TLSGroupSecP256r1MLKEM768:  uint16(tls.SecP256r1MLKEM768),
+	configv1.TLSGroupSecP384r1MLKEM1024: uint16(tls.SecP384r1MLKEM1024),
+}
 
 // TLSConfig holds the resolved OpenShift TLS profile and adherence policy.
 type TLSConfig struct {
@@ -80,9 +95,13 @@ func tlsStringsFromProfile(spec configv1.TLSProfileSpec) (string, string, string
 	if len(spec.Ciphers) > 0 {
 		cipherSuites = strings.Join(libgocrypto.OpenSSLToIANACipherSuites(spec.Ciphers), ",")
 	}
-	// TODO(curves): once openshift/api#2583 merges and TLSProfileSpec.Curves is available,
-	// convert curve names to numeric CurveIDs.
-	curvePreferences := ""
+	var curveIDs []string
+	for _, g := range spec.Groups {
+		if id, ok := tlsGroupToCurveID[g]; ok {
+			curveIDs = append(curveIDs, strconv.FormatUint(uint64(id), 10))
+		}
+	}
+	curvePreferences := strings.Join(curveIDs, ",")
 	minVersion := string(spec.MinTLSVersion)
 	return cipherSuites, curvePreferences, minVersion
 }

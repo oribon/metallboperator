@@ -22,17 +22,25 @@ func TestConfigFromProfile_Intermediate(t *testing.T) {
 			t.Errorf("cipher %q looks like OpenSSL name, expected IANA", c)
 		}
 	}
-	if curvePreferences != "" {
-		t.Errorf("expected empty curve preferences (deferred), got %s", curvePreferences)
+	if curvePreferences == "" {
+		t.Error("expected non-empty curve preferences")
+	}
+	wantCurves := "4588,29,23,24"
+	if curvePreferences != wantCurves {
+		t.Errorf("expected curve preferences %q, got %q", wantCurves, curvePreferences)
 	}
 }
 
 func TestConfigFromProfile_Modern(t *testing.T) {
 	spec := *configv1.TLSProfiles[configv1.TLSProfileModernType]
-	_, _, minVersion := tlsStringsFromProfile(spec)
+	_, curvePreferences, minVersion := tlsStringsFromProfile(spec)
 
 	if minVersion != string(configv1.VersionTLS13) {
 		t.Errorf("expected VersionTLS13, got %s", minVersion)
+	}
+	wantCurves := "4588,29,23,24"
+	if curvePreferences != wantCurves {
+		t.Errorf("expected curve preferences %q, got %q", wantCurves, curvePreferences)
 	}
 }
 
@@ -40,8 +48,9 @@ func TestConfigFromProfile_Custom(t *testing.T) {
 	spec := configv1.TLSProfileSpec{
 		Ciphers:       []string{"ECDHE-RSA-AES128-GCM-SHA256", "ECDHE-ECDSA-AES256-GCM-SHA384"},
 		MinTLSVersion: configv1.VersionTLS12,
+		Groups:        []configv1.TLSGroup{configv1.TLSGroupX25519, configv1.TLSGroupSecP384r1},
 	}
-	cipherSuites, _, minVersion := tlsStringsFromProfile(spec)
+	cipherSuites, curvePreferences, minVersion := tlsStringsFromProfile(spec)
 
 	if minVersion != "VersionTLS12" {
 		t.Errorf("expected VersionTLS12, got %s", minVersion)
@@ -55,6 +64,10 @@ func TestConfigFromProfile_Custom(t *testing.T) {
 	}
 	if ciphers[1] != "TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384" {
 		t.Errorf("unexpected second cipher: %s", ciphers[1])
+	}
+	wantCurves := "29,24"
+	if curvePreferences != wantCurves {
+		t.Errorf("expected curve preferences %q, got %q", wantCurves, curvePreferences)
 	}
 }
 
