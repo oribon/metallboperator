@@ -23,6 +23,7 @@ import (
 	"context"
 	"path/filepath"
 	"testing"
+	"time"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
@@ -51,6 +52,9 @@ const (
 	MetalLBTestNameSpace     = "metallb-test-namespace"
 	FRRK8SExternalNameSpace  = "openshift-frr-k8s"
 	CNOMinFRRK8sVersion      = "4.17.0-0"
+	// Shortened so the tests do not have to wait for the production interval to observe
+	// the operator recovering once the CRD catches up.
+	CNOHandoffRequeueAfterTest = 500 * time.Millisecond
 )
 
 var (
@@ -116,6 +120,7 @@ var _ = BeforeSuite(func() {
 	// adjusted to this package's directory.
 	controllers.MetalLBChartPath = MetalLBHelmChartPathTest
 	controllers.FRRK8SChartPath = FRRK8SHelmChartPathTest
+	controllers.CNOHandoffRequeueAfter = CNOHandoffRequeueAfterTest
 
 	reconciler := &controllers.MetalLBReconciler{
 		Client:    k8sClient,
@@ -139,6 +144,7 @@ var _ = AfterSuite(func() {
 	cancel()
 	controllers.MetalLBChartPath = controllers.MetalLBChartPathController
 	controllers.FRRK8SChartPath = controllers.FRRK8SChartPathController
+	controllers.CNOHandoffRequeueAfter = controllers.CNOHandoffRequeueAfterController
 	err := testEnv.Stop()
 	Expect(err).ToNot(HaveOccurred())
 })
